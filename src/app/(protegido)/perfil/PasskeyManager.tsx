@@ -12,9 +12,9 @@ type PasskeyItem = {
 
 export function PasskeyManager() {
   const supabase = createClient();
-  const [suportado] = useState(
-    () => typeof window !== "undefined" && !!window.PublicKeyCredential
-  );
+  // Começa false (igual no servidor e no 1º render do cliente, evita
+  // mismatch de hidratação) e só liga depois de montado, se suportado.
+  const [suportado, setSuportado] = useState(false);
   const [passkeys, setPasskeys] = useState<PasskeyItem[] | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -29,13 +29,21 @@ export function PasskeyManager() {
   }
 
   useEffect(() => {
+    // Detecção de recurso do navegador só pode rodar no cliente — precisa
+    // ser um efeito mesmo (não dá pra calcular na primeira renderização sem
+    // causar mismatch de hidratação entre servidor e cliente).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSuportado(typeof window !== "undefined" && !!window.PublicKeyCredential);
+  }, []);
+
+  useEffect(() => {
     if (!suportado) return;
     // Falso positivo: o setState (dentro de carregar()) acontece depois de
     // um await, não sincronamente no efeito.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [suportado]);
 
   async function cadastrar() {
     setErro(null);

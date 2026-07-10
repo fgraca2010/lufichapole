@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export function PasskeyLoginButton({ proximo }: { proximo: string }) {
   const supabase = createClient();
   const router = useRouter();
-  const [suportado] = useState(
-    () => typeof window !== "undefined" && !!window.PublicKeyCredential
-  );
+  // Começa false (igual no servidor e no 1º render do cliente, evita
+  // mismatch de hidratação) e só liga depois de montado, se o navegador
+  // suportar — o botão aparece com um leve atraso, o que é esperado aqui.
+  const [suportado, setSuportado] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    // Detecção de recurso do navegador só pode rodar no cliente — precisa
+    // ser um efeito mesmo (não dá pra calcular na primeira renderização sem
+    // causar mismatch de hidratação entre servidor e cliente).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSuportado(typeof window !== "undefined" && !!window.PublicKeyCredential);
+  }, []);
 
   async function entrar() {
     setErro(null);
