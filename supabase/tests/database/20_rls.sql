@@ -5,19 +5,21 @@ select plan(9);
 -- ------------------------------------------------------------------------
 -- Fixtures (como postgres, bypassa RLS)
 -- ------------------------------------------------------------------------
-insert into auth.users (id, email) values
-  ('00000000-0000-0000-0000-000000000011', 'aluno-a@teste.local'),
-  ('00000000-0000-0000-0000-000000000012', 'aluno-b@teste.local'),
-  ('00000000-0000-0000-0000-000000000013', 'professor-vinculado@teste.local'),
-  ('00000000-0000-0000-0000-000000000014', 'professor-outro@teste.local'),
-  ('00000000-0000-0000-0000-000000000015', 'admin@teste.local');
+-- perfis é criado automaticamente pelo trigger handle_new_user() a partir da metadata.
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-000000000013', 'professor-vinculado@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professora Vinculada')),
+  ('00000000-0000-0000-0000-000000000014', 'professor-outro@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professora Outra')),
+  ('00000000-0000-0000-0000-000000000015', 'admin@teste.local',
+    jsonb_build_object('persona', 'admin', 'nome_completo', 'Admin'));
 
-insert into perfis (id, persona, nome_completo, professor_id) values
-  ('00000000-0000-0000-0000-000000000013', 'professor', 'Professora Vinculada', null),
-  ('00000000-0000-0000-0000-000000000014', 'professor', 'Professora Outra', null),
-  ('00000000-0000-0000-0000-000000000015', 'admin', 'Admin', null),
-  ('00000000-0000-0000-0000-000000000011', 'aluno', 'Aluna A', '00000000-0000-0000-0000-000000000013'),
-  ('00000000-0000-0000-0000-000000000012', 'aluno', 'Aluna B', null);
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-000000000011', 'aluno-a@teste.local',
+    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Aluna A',
+      'professor_id', '00000000-0000-0000-0000-000000000013')),
+  ('00000000-0000-0000-0000-000000000012', 'aluno-b@teste.local',
+    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Aluna B'));
 
 select id as movimento_1 into temp t_mov from movimentos order by id limit 1;
 grant select on t_mov to authenticated;

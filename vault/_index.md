@@ -31,7 +31,18 @@
 ## Autenticação
 
 - Métodos: e-mail/senha, Google OAuth, Microsoft OAuth.
-- **2FA obrigatório via e-mail**, independente do método de login escolhido.
+- **2FA obrigatório via e-mail**, independente do método de login primário —
+  decisão final confirmada em 2026-07-10 (chegou a ser trocada por TOTP e
+  depois revertida de volta pra e-mail na mesma sessão).
+- Implementação: não é um "fator MFA" nativo do Supabase (`auth.mfa` só cobre
+  TOTP e telefone) — é um portão customizado. Fluxo: login primário →
+  `signInWithOtp({email})` manda um código de 6 dígitos → `verifyOtp()` →
+  server action seta um cookie `httpOnly` (`lu_mfa_verificado`) → middleware
+  exige esse cookie pra liberar `/aluno`, `/professor`, `/admin`. Cookie é
+  limpo no logout, então o código é pedido de novo em cada novo login.
+- **Requer SMTP configurado em produção** — o serviço de e-mail embutido do
+  Supabase é limitado e não é recomendado pra produção (ver
+  `docs/adr/0001-schema-inicial.md`). Usar Resend ou Brevo (free tier).
 - Todo usuário consegue ver seus próprios dados de cadastro (mínimos possíveis
   por LGPD) e sua senha (para quem não usa login social).
 

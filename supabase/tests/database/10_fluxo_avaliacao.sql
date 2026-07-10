@@ -7,15 +7,17 @@ select plan(24);
 -- ------------------------------------------------------------------------
 -- Fixtures (como postgres, bypassa RLS)
 -- ------------------------------------------------------------------------
-insert into auth.users (id, email) values
-  ('00000000-0000-0000-0000-000000000001', 'aluno1@teste.local'),
-  ('00000000-0000-0000-0000-000000000002', 'professor1@teste.local'),
-  ('00000000-0000-0000-0000-000000000003', 'professor2@teste.local');
+-- perfis é criado automaticamente pelo trigger handle_new_user() a partir da metadata.
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-000000000002', 'professor1@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professora 1')),
+  ('00000000-0000-0000-0000-000000000003', 'professor2@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professora 2'));
 
-insert into perfis (id, persona, nome_completo, professor_id) values
-  ('00000000-0000-0000-0000-000000000002', 'professor', 'Professora 1', null),
-  ('00000000-0000-0000-0000-000000000003', 'professor', 'Professora 2', null),
-  ('00000000-0000-0000-0000-000000000001', 'aluno', 'Aluna 1', '00000000-0000-0000-0000-000000000002');
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-000000000001', 'aluno1@teste.local',
+    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Aluna 1',
+      'professor_id', '00000000-0000-0000-0000-000000000002'));
 
 update configuracao_sistema set sucessos_necessarios = 3 where id = 1;
 

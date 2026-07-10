@@ -15,3 +15,10 @@ coverage/
 
 # Obsidian workspace cache (não versionar; conteúdo do vault sim)
 vault/.obsidian/workspace*.json
+
+# Playwright MCP (snapshots/logs de sessões de teste manual)
+.playwright-mcp/
+
+# Vercel CLI
+.vercel
+.env*
