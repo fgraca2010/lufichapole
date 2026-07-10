@@ -1,5 +1,61 @@
 # HANDOFF
 
+## 2026-07-10 — Revisão completa: features pendentes + mobile
+
+### O que foi feito nesta sessão
+- Revisão sistemática (via agente) de tudo que tinha sido pedido nas sessões
+  anteriores, comparando com o que estava realmente implementado.
+- **Implementado o que faltava**:
+  - Histórico detalhado de tentativas do aluno (`/aluno/historico`) — log
+    linha a linha (data, nível, bloco, categoria, movimento, sucesso/erro),
+    paginado. Não existia — só havia os números agregados do `resumo_aluno`.
+  - Utilitário de máscara LGPD reutilizável (`src/lib/mascarar.ts` —
+    `mascararCpf`, `mascararTelefone`, `mascararEndereco`,
+    `mascararDataNascimento`). Nenhuma tela ainda expõe CPF/telefone/endereço
+    de outra pessoa (a "proteção" até então era por omissão — os campos nunca
+    eram buscados nessas telas), mas o utilitário fica pronto pra quando/se
+    isso for necessário.
+- **Mobile**: o app vai ser usado no celular — revisão dedicada encontrou e
+  corrigiu:
+  - Menu do header sem colapsar virava 6+ itens quebrando linha feio →
+    `NavPrincipal.tsx` novo, com hambúrguer no mobile (`sm:hidden`) e nav
+    horizontal normal em telas maiores.
+  - Nome do usuário no header sem `truncate`/`max-width` podia estourar o
+    layout ao lado do avatar — corrigido.
+  - `MovimentoRow` (ficha do aluno): botões de sucesso/erro pequenos (abaixo
+    do tamanho de toque recomendado) e texto de status longo competindo com
+    os botões na mesma linha sem quebra — corrigido (botões 36x36px mínimo,
+    `flex-wrap`).
+  - `AvaliacaoItem` (fila de avaliação do professor): bloco de texto longo
+    (aluno + nível + bloco + categoria + movimento) sem `flex-wrap` ao lado
+    dos botões — pior caso de overflow encontrado, corrigido.
+  - `admin/alunos`: linha de aluno com nome+foto+select de professor+botão
+    excluir sem `flex-wrap` — corrigido.
+  - `admin/conteudo`: formulários "Novo movimento"/"Adicionar bloco" sem
+    `flex-wrap`, risco real de overflow horizontal — corrigido.
+  - `ConvidarForm` (Admin): campos nome/e-mail/professor ficavam lado a lado
+    espremidos no celular — agora ocupam largura total em telas pequenas.
+  - Bug real encontrado e corrigido: erro de hidratação React #418 nos
+    botões de Passkey (`PasskeyLoginButton`, `PasskeyManager`) — a detecção
+    de suporte a WebAuthn (`typeof window`) dava resultado diferente no
+    servidor (sempre indisponível) vs. no cliente na primeira renderização.
+    Corrigido detectando só depois de montado (`useEffect`), começando
+    `false` nos dois lados.
+  - Tudo testado de verdade em viewport de 390px contra produção via
+    Playwright (login, admin dashboard + menu + alunos + conteúdo, ficha do
+    aluno com professor+foto, fila de avaliação do professor).
+- Todas as mudanças: build + lint + Vitest + pgTAP (50+ assertions) passando,
+  commitadas, no CI (GitHub Actions verde) e deployadas em produção.
+
+### Observação de infraestrutura
+- A conexão com o banco de teste (`lufichapoledev`) ficou visivelmente mais
+  lenta nesta sessão (cada migration/seed via `psql` demorou bem mais que o
+  normal — commits com o hook do Husky levaram 2-3 min em vez de segundos).
+  Não é um bug do projeto, parece latência de rede/pooler. Se persistir,
+  vale investigar a região do pooler ou considerar reduzir o número de
+  conexões separadas que `scripts/test-db.sh` abre (uma por arquivo de
+  migration) agrupando em menos chamadas de `psql`.
+
 ## 2026-07-09/10 — Fases 1 a 4 concluídas (workspace, extração, scaffold, banco)
 
 ### O que foi feito nesta sessão (continuação)
