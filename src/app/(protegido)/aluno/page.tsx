@@ -15,13 +15,21 @@ export default async function AlunoPage({
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("persona")
+    .select("persona, professor_id")
     .eq("id", user.id)
     .single();
 
   if (perfil?.persona !== "aluno") {
     redirect(`/${perfil?.persona ?? ""}`);
   }
+
+  const { data: professor } = perfil.professor_id
+    ? await supabase
+        .from("perfis")
+        .select("nome_completo")
+        .eq("id", perfil.professor_id)
+        .single()
+    : { data: null };
 
   const [{ data: resumo }, { data: config }, { data: niveis }, { data: status }] =
     await Promise.all([
@@ -55,6 +63,13 @@ export default async function AlunoPage({
 
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
+      <p className="text-sm text-terciaria">
+        Professor(a):{" "}
+        <span className="font-medium text-black">
+          {professor?.nome_completo ?? "ainda não vinculado"}
+        </span>
+      </p>
+
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Estatistica rotulo="Treinos" valor={r?.treinos ?? 0} />
         <Estatistica rotulo="Exercícios completos" valor={r?.exercicios_completos ?? 0} />

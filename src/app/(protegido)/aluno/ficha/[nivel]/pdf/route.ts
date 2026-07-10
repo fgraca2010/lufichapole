@@ -16,13 +16,21 @@ export async function GET(
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("nome_completo, persona")
+    .select("nome_completo, persona, professor_id")
     .eq("id", user.id)
     .single();
 
   if (perfil?.persona !== "aluno") {
     return NextResponse.json({ erro: "Só o aluno pode baixar a própria ficha" }, { status: 403 });
   }
+
+  const { data: professor } = perfil.professor_id
+    ? await supabase
+        .from("perfis")
+        .select("nome_completo")
+        .eq("id", perfil.professor_id)
+        .single()
+    : { data: null };
 
   const [{ data: nivelRow }, { data: config }, { data: status }, logoResp] = await Promise.all([
     supabase
@@ -73,6 +81,7 @@ export async function GET(
       logoBase64,
       nivelNumero,
       nomeAluno: perfil.nome_completo,
+      nomeProfessor: professor?.nome_completo ?? null,
       sucessosNecessarios: necessarios,
       blocos,
       geradoEm: new Date().toLocaleDateString("pt-BR"),

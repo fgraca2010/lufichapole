@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
   tituloMarca: { fontSize: 12, fontWeight: 700, color: cores.primaria },
   subtitulo: { fontSize: 9, color: cores.terciaria },
   infoAluno: { marginBottom: 10, flexDirection: "row", justifyContent: "space-between" },
+  colunas: { flexDirection: "row", gap: 12 },
+  coluna: { width: "48.5%" },
   bloco: { marginBottom: 8 },
   tituloBloco: { fontSize: 10, fontWeight: 700, color: cores.terciaria, marginBottom: 3 },
   linhaMovimento: {
@@ -24,17 +26,17 @@ const styles = StyleSheet.create({
     borderBottomColor: cores.cinzaClaro,
   },
   categoria: {
-    width: 14,
-    fontSize: 8,
+    width: 12,
+    fontSize: 7.5,
     fontWeight: 700,
     color: cores.terciaria,
   },
-  nomeMovimento: { flex: 1, fontSize: 8.5, color: cores.preto },
-  caixas: { flexDirection: "row", gap: 2 },
+  nomeMovimento: { flex: 1, fontSize: 7.5, color: cores.preto },
+  caixas: { flexDirection: "row", gap: 1.5 },
   caixa: {
-    width: 9,
-    height: 9,
-    borderWidth: 0.7,
+    width: 7,
+    height: 7,
+    borderWidth: 0.6,
     borderColor: cores.terciaria,
   },
   caixaPreenchida: {
@@ -64,10 +66,29 @@ type Bloco = {
   movimentos: Movimento[];
 };
 
+/**
+ * Distribui os blocos em 2 colunas, sempre colocando o próximo bloco na
+ * coluna com menos linhas acumuladas até agora — fica mais equilibrado do
+ * que só alternar par/ímpar, já que os blocos têm tamanhos bem diferentes.
+ */
+function distribuirEmDuasColunas(blocos: Bloco[]): [Bloco[], Bloco[]] {
+  const colunas: [Bloco[], Bloco[]] = [[], []];
+  const alturas = [0, 0];
+
+  for (const bloco of blocos) {
+    const destino = alturas[0] <= alturas[1] ? 0 : 1;
+    colunas[destino].push(bloco);
+    alturas[destino] += bloco.movimentos.length + 1; // +1 pelo título do bloco
+  }
+
+  return colunas;
+}
+
 export function FichaPdfDocument({
   logoBase64,
   nivelNumero,
   nomeAluno,
+  nomeProfessor,
   sucessosNecessarios,
   blocos,
   geradoEm,
@@ -75,6 +96,7 @@ export function FichaPdfDocument({
   logoBase64: string;
   nivelNumero: number;
   nomeAluno: string;
+  nomeProfessor: string | null;
   sucessosNecessarios: number;
   blocos: Bloco[];
   geradoEm: string;
@@ -93,31 +115,38 @@ export function FichaPdfDocument({
 
         <View style={styles.infoAluno}>
           <Text>Aluno(a): {nomeAluno}</Text>
+          <Text>Professor(a): {nomeProfessor ?? "ainda não vinculado"}</Text>
           <Text>Gerado em: {geradoEm}</Text>
         </View>
 
-        {blocos.map((bloco) => (
-          <View key={bloco.numero} style={styles.bloco} wrap={false}>
-            <Text style={styles.tituloBloco}>Bloco {bloco.numero}</Text>
-            {bloco.movimentos.map((mov) => (
-              <View key={mov.id} style={styles.linhaMovimento}>
-                <Text style={styles.categoria}>{mov.categoria ?? ""}</Text>
-                <Text style={styles.nomeMovimento}>{mov.nome}</Text>
-                <View style={styles.caixas}>
-                  {Array.from({ length: sucessosNecessarios }).map((_, i) => {
-                    const preenchida = mov.aprovado || i < mov.sucessosConsecutivos;
-                    return (
-                      <View
-                        key={i}
-                        style={preenchida ? [styles.caixa, styles.caixaPreenchida] : styles.caixa}
-                      />
-                    );
-                  })}
+        <View style={styles.colunas}>
+          {distribuirEmDuasColunas(blocos).map((coluna, i) => (
+            <View key={i} style={styles.coluna}>
+              {coluna.map((bloco) => (
+                <View key={bloco.numero} style={styles.bloco} wrap={false}>
+                  <Text style={styles.tituloBloco}>Bloco {bloco.numero}</Text>
+                  {bloco.movimentos.map((mov) => (
+                    <View key={mov.id} style={styles.linhaMovimento}>
+                      <Text style={styles.categoria}>{mov.categoria ?? ""}</Text>
+                      <Text style={styles.nomeMovimento}>{mov.nome}</Text>
+                      <View style={styles.caixas}>
+                        {Array.from({ length: sucessosNecessarios }).map((_, j) => {
+                          const preenchida = mov.aprovado || j < mov.sucessosConsecutivos;
+                          return (
+                            <View
+                              key={j}
+                              style={preenchida ? [styles.caixa, styles.caixaPreenchida] : styles.caixa}
+                            />
+                          );
+                        })}
+                      </View>
+                    </View>
+                  ))}
                 </View>
-              </View>
-            ))}
-          </View>
-        ))}
+              ))}
+            </View>
+          ))}
+        </View>
 
         <Text style={styles.rodape}>
           Lu Fortuna Polesport — ficha gerada automaticamente pelo sistema, use pra anotar seu treino sem celular.
