@@ -30,7 +30,7 @@
 
 ## Autenticação
 
-- Métodos: e-mail/senha, Google OAuth, Microsoft OAuth.
+- Métodos: e-mail/senha, Google OAuth (Microsoft removido em 2026-07-10).
 - **2FA obrigatório via e-mail**, independente do método de login primário —
   decisão final confirmada em 2026-07-10 (chegou a ser trocada por TOTP e
   depois revertida de volta pra e-mail na mesma sessão).

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { sair } from "./actions";
 import { NavLink } from "./NavLink";
+import { Avatar } from "./Avatar";
 
 const NAV_POR_PERSONA: Record<string, { href: string; rotulo: string }[]> = {
   aluno: [
@@ -39,7 +40,7 @@ export default async function ProtegidoLayout({
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("nome_completo, persona")
+    .select("nome_completo, persona, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -50,8 +51,9 @@ export default async function ProtegidoLayout({
       <header className="flex flex-col gap-3 border-b border-terciaria/10 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Image src="/logo-lu-fortuna.png" alt="Lu Fortuna Polesport" width={36} height={36} />
-          <span className="text-sm font-medium text-terciaria">
+          <span className="flex items-center gap-2 text-sm font-medium text-terciaria">
             {perfil?.nome_completo ?? user.email}
+            <Avatar avatarUrl={perfil?.avatar_url} nome={perfil?.nome_completo ?? "usuário"} tamanho={28} />
           </span>
         </div>
 

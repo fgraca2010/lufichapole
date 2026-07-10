@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ConvidarForm } from "../ConvidarForm";
 import { VincularProfessor } from "../VincularProfessor";
 import { ExcluirUsuarioButton } from "../ExcluirUsuarioButton";
+import { Avatar } from "../../Avatar";
 import { convidarAluno } from "../actions";
 
 export default async function AdminAlunosPage() {
@@ -20,7 +21,7 @@ export default async function AdminAlunosPage() {
   const [{ data: alunos }, { data: professores }] = await Promise.all([
     supabase
       .from("perfis")
-      .select("id, nome_completo, professor_id")
+      .select("id, nome_completo, professor_id, avatar_url")
       .eq("persona", "aluno")
       .order("nome_completo"),
     supabase
@@ -49,7 +50,10 @@ export default async function AdminAlunosPage() {
               key={a.id}
               className="flex items-center justify-between gap-2 border-b border-terciaria/10 py-1.5 text-sm"
             >
-              <span className="text-black">{a.nome_completo}</span>
+              <span className="flex items-center gap-2 text-black">
+                {a.nome_completo}
+                <Avatar avatarUrl={a.avatar_url} nome={a.nome_completo} />
+              </span>
               <div className="flex items-center gap-3">
                 <VincularProfessor
                   alunoId={a.id}

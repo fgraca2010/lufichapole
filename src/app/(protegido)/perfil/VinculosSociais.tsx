@@ -8,7 +8,6 @@ type Identidade = { id: string; provider: string; identity_id: string };
 const ROTULOS: Record<string, string> = {
   email: "E-mail e senha",
   google: "Google",
-  azure: "Microsoft",
 };
 
 export function VinculosSociais() {
@@ -34,7 +33,7 @@ export function VinculosSociais() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function conectar(provider: "google" | "azure") {
+  async function conectar(provider: "google") {
     setErro(null);
     setCarregando(provider);
     const { data, error } = await supabase.auth.linkIdentity({
@@ -76,7 +75,7 @@ export function VinculosSociais() {
     <div className="flex flex-col gap-2 rounded-lg border border-terciaria/10 p-4">
       <h2 className="text-sm font-semibold text-terciaria">Login vinculado</h2>
 
-      {(["email", "google", "azure"] as const).map((provider) => {
+      {(["email", "google"] as const).map((provider) => {
         const identidade = conectados.get(provider);
         return (
           <div key={provider} className="flex items-center justify-between text-sm">
@@ -97,7 +96,7 @@ export function VinculosSociais() {
             ) : (
               <button
                 disabled={carregando === provider}
-                onClick={() => conectar(provider as "google" | "azure")}
+                onClick={() => conectar(provider as "google")}
                 className="text-xs text-primaria underline disabled:opacity-40"
               >
                 Conectar

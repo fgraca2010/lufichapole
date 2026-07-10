@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { Avatar } from "../../Avatar";
 
 export default async function ProfessorAlunosPage() {
   const supabase = await createClient();
@@ -16,7 +17,7 @@ export default async function ProfessorAlunosPage() {
 
   const { data: alunos } = await supabase
     .from("perfis")
-    .select("id, nome_completo")
+    .select("id, nome_completo, avatar_url")
     .eq("professor_id", user.id)
     .order("nome_completo");
 
@@ -29,9 +30,11 @@ export default async function ProfessorAlunosPage() {
           <Link
             key={a.id}
             href={`/professor/alunos/${a.id}`}
-            className="border-b border-terciaria/10 py-1.5 text-sm text-black hover:text-primaria"
+            className="flex items-center gap-2 border-b border-terciaria/10 py-1.5 text-sm text-black hover:text-primaria"
           >
-            {a.nome_completo} →
+            {a.nome_completo}
+            <Avatar avatarUrl={a.avatar_url} nome={a.nome_completo} />
+            {" →"}
           </Link>
         ))}
         {(alunos ?? []).length === 0 && (

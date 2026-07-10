@@ -1,6 +1,6 @@
 -- Testes de RLS: cada persona só vê/edita o que a regra de negócio permite.
 begin;
-select plan(9);
+select plan(11);
 
 -- ------------------------------------------------------------------------
 -- Fixtures (como postgres, bypassa RLS)
@@ -62,6 +62,24 @@ set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000014"
 select is(
   (select count(*)::int from perfis where id = '00000000-0000-0000-0000-000000000011'),
   0, 'professor NÃO vinculado não vê o perfil da aluna A'
+);
+
+reset role;
+reset "request.jwt.claims";
+
+-- ------------------------------------------------------------------------
+-- perfis: aluno vê o nome do próprio professor (mas não de outro professor)
+-- ------------------------------------------------------------------------
+set local role authenticated;
+set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000011","role":"authenticated"}';
+
+select is(
+  (select nome_completo from perfis where id = '00000000-0000-0000-0000-000000000013'),
+  'Professora Vinculada', 'aluno A vê o nome do próprio professor'
+);
+select is(
+  (select count(*)::int from perfis where id = '00000000-0000-0000-0000-000000000014'),
+  0, 'aluno A não vê o perfil de um professor que não é o seu'
 );
 
 reset role;

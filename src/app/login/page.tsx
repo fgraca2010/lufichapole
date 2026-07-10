@@ -66,16 +66,6 @@ export default async function LoginPage({
         >
           Entrar com Google
         </button>
-        <button
-          type="button"
-          formAction={async () => {
-            "use server";
-            await entrarComOAuth("azure");
-          }}
-          className="rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria"
-        >
-          Entrar com Microsoft
-        </button>
       </form>
 
       <p className="max-w-sm text-center text-xs text-terciaria/60">

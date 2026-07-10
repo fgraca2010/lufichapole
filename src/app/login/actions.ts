@@ -21,7 +21,7 @@ export async function entrarComSenha(formData: FormData) {
   redirect(proximo);
 }
 
-export async function entrarComOAuth(provider: "google" | "azure") {
+export async function entrarComOAuth(provider: "google") {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,

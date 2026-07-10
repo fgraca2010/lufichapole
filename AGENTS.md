@@ -43,11 +43,9 @@ Nunca pular esse alinhamento por "ser óbvio" ou "ser rápido".
   versionado. Vivem em `.env.local` (gitignored) e nas variáveis de ambiente da
   Vercel. Nunca solicitar ou aceitar que o usuário cole segredos diretamente no
   chat — se acontecer, orientar a rotacionar a credencial.
-- Login exige 2FA via app autenticador (TOTP — Google Authenticator, Microsoft
-  Authenticator, Authy, etc.), independente do método de login primário
-  (email/senha, Google, Microsoft). Decisão atualizada em 2026-07-10
-  (substituiu a ideia inicial de 2FA por e-mail — nativo do Supabase Auth,
-  sem custo de SMTP). Ver `vault/_index.md`.
+- Login exige 2FA por e-mail (portão customizado, ver `vault/_index.md`),
+  independente do método de login primário (email/senha ou Google — Microsoft
+  removido em 2026-07-10).
 
 ## Continuidade de Sessão (obrigatório, qualquer ferramenta)
 

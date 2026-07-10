@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MovimentoRow } from "./MovimentoRow";
+import { Avatar } from "../Avatar";
 
 type StatusMovimento = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
@@ -26,7 +27,7 @@ export default async function AlunoPage({
   const { data: professor } = perfil.professor_id
     ? await supabase
         .from("perfis")
-        .select("nome_completo")
+        .select("nome_completo, avatar_url")
         .eq("id", perfil.professor_id)
         .single()
     : { data: null };
@@ -63,10 +64,11 @@ export default async function AlunoPage({
 
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
-      <p className="text-sm text-terciaria">
+      <p className="flex items-center gap-2 text-sm text-terciaria">
         Professor(a):{" "}
-        <span className="font-medium text-black">
+        <span className="flex items-center gap-2 font-medium text-black">
           {professor?.nome_completo ?? "ainda não vinculado"}
+          <Avatar avatarUrl={professor?.avatar_url} nome={professor?.nome_completo ?? "professor"} />
         </span>
       </p>
 
