@@ -1,0 +1,17 @@
+---
+description: SPDD-lite — declare DoD, restrictions, decomposition and await confirmation before any substantive task
+alwaysApply: true
+---
+# SPDD-lite: Alinhamento Antes de Executar
+
+## Para qualquer tarefa substantiva
+Antes de produzir qualquer conteúdo, declarar:
+1. **DoD** — o que será produzido e como sabemos que está completo
+2. **Restrições e premissas** — o que estamos assumindo como verdadeiro
+3. **Decomposição** — sub-tarefas numeradas se composta
+4. **Aguardar confirmação** — só executar após "ok" do usuário
+
+## Proibições
+- Nunca inventar dados, números ou referências não ancoradas em documentos do projeto
+- Nunca pular o alinhamento por "ser óbvio" ou "ser rápido"
+- Nunca preencher conteúdo antes de definir estrutura

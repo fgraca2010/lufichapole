@@ -1,0 +1,22 @@
+---
+description: Session continuity — read HANDOFF.md and README.md on every session start
+alwaysApply: true
+---
+# Continuidade de Sessão
+
+Ver seção "Continuidade de Sessão" em `AGENTS.md` — esta regra é um espelho para uso dentro do
+Cursor IDE. `AGENTS.md` é a fonte de verdade; atualize lá primeiro.
+
+## Ao iniciar ou retomar qualquer sessão
+1. Ler `HANDOFF.md` — estado atual, o que foi feito, próximo passo imediato
+2. Ler `README.md` (ou `AGENTS.md`) — instruções permanentes e modo de trabalho
+3. Ler `vault/_index.md`
+4. Confirmar com o usuário se o contexto está correto antes de prosseguir
+
+## Ao encerrar sessão longa (> 30 min de trabalho substantivo)
+Atualizar `HANDOFF.md` (e `vault/`) com:
+- Data da atualização (ISO: AAAA-MM-DD)
+- O que foi feito na sessão
+- Estado atual dos artefatos principais
+- Próximo passo imediato
+- Decisões relevantes tomadas

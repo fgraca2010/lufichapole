@@ -1,0 +1,2628 @@
+{
+  "meta": {
+    "extraido_em": "2026-07-09",
+    "metodo": "pdftotext -layout para níveis 1 e 2 (PDFs com texto); OCR (tesseract) + leitura visual cruzada para nível 3 (PDF sem camada de texto)",
+    "observacoes_gerais": [
+      "Os PDFs originais são de outras academias (Academia Nissei para níveis 1 e 2; ERGOSCAN Gaveacor para nível 3) — servem apenas como fonte do conteúdo de movimentos/níveis, não de identidade visual. A marca do app será Lu Fortuna Polesport.",
+      "O número de checkboxes por movimento varia entre os PDFs originais (4 no nível 1, 2 no nível 2, 4 no nível 3) e nenhum dos documentos rotula o que cada checkbox representa. [DADO AUSENTE: significado de cada checkbox/coluna de repetição — confirmar com a Lu antes de modelar como 'tentativas', 'datas' ou outra coisa]",
+      "Categorias A-E parecem indicar sub-níveis de dificuldade dentro de cada bloco, mas isso também não está rotulado explicitamente no PDF. [DADO AUSENTE: confirmar significado exato das letras A-E]"
+    ]
+  },
+  "niveis": [
+    {
+      "nivel": 1,
+      "fonte_pdf": "docs/input/fichas-pdf/ficha de pole nivel 1 revisada.pdf",
+      "marca_original_pdf": "Academia Nissei",
+      "checkboxes_por_movimento": 4,
+      "blocos": [
+        {
+          "bloco": 1,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Body Position"
+            },
+            {
+              "categoria": "A",
+              "nome": "Tour"
+            },
+            {
+              "categoria": "A",
+              "nome": "Start position 1 + floor figure 1"
+            },
+            {
+              "categoria": "A",
+              "nome": "Jump 1"
+            },
+            {
+              "categoria": "B",
+              "nome": "Start position 2 + floor figure 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Jump slide 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Jump 2 – Spinning mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Jump 3 free fall"
+            },
+            {
+              "categoria": "C",
+              "nome": "Board n' close – Spinning mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Jump 4 (carousel)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Jump 4 – Spinning mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Jump 5 (cradle)"
+            },
+            {
+              "categoria": "E",
+              "nome": "Board n' close + cradle seat – Spinning mode"
+            }
+          ]
+        },
+        {
+          "bloco": 2,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Boomerang Compass"
+            },
+            {
+              "categoria": "A",
+              "nome": "Crab Basic"
+            },
+            {
+              "categoria": "A",
+              "nome": "Crab 1 Hand (3 saídas)"
+            },
+            {
+              "categoria": "A",
+              "nome": "Crab Front"
+            },
+            {
+              "categoria": "B",
+              "nome": "Boomerang combo"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back Boomerang"
+            },
+            {
+              "categoria": "B",
+              "nome": "Crab Atack"
+            },
+            {
+              "categoria": "C",
+              "nome": "Bridge"
+            },
+            {
+              "categoria": "D",
+              "nome": "Juliete"
+            },
+            {
+              "categoria": "D",
+              "nome": "Exit Juliete"
+            },
+            {
+              "categoria": "E",
+              "nome": "Crab 1 hand + Bridge"
+            }
+          ]
+        },
+        {
+          "bloco": 3,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Pirouet front"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pirouet 1 hand"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pirouet 2 hands"
+            },
+            {
+              "categoria": "D",
+              "nome": "Pirouet low"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pirouet 3 times"
+            }
+          ]
+        },
+        {
+          "bloco": 4,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Knee Hook"
+            },
+            {
+              "categoria": "A",
+              "nome": "Ballerina"
+            },
+            {
+              "categoria": "A",
+              "nome": "Ballerina Sky + Bird"
+            },
+            {
+              "categoria": "A",
+              "nome": "Hook Back"
+            },
+            {
+              "categoria": "A",
+              "nome": "Exit Hook Back"
+            },
+            {
+              "categoria": "A",
+              "nome": "Double knee hook back"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hook closed"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hook cross closed"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hook cross closed – spinning mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hook P"
+            },
+            {
+              "categoria": "C",
+              "nome": "Blade on floor"
+            },
+            {
+              "categoria": "C",
+              "nome": "Hook front"
+            },
+            {
+              "categoria": "C",
+              "nome": "Kick around up to hook back"
+            },
+            {
+              "categoria": "D",
+              "nome": "Hook back 1 hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Hook front 1 hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Tango (hook front + hook back)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Tango - spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Side spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Exit sidespin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Side spin roll – spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Jump back spin"
+            }
+          ]
+        },
+        {
+          "bloco": 5,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Fireman basic"
+            },
+            {
+              "categoria": "A",
+              "nome": "Fireman basic – spinning mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Fireman Cross open"
+            },
+            {
+              "categoria": "B",
+              "nome": "Fireman Cross closed"
+            },
+            {
+              "categoria": "B",
+              "nome": "Fireman Flat + spinning mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hollywood"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hollywood – Spinning mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Fireman cross pull up + spinning mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Fireman vertical + spinning mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Fireman ball"
+            },
+            {
+              "categoria": "D",
+              "nome": "Fireman half Split + spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Fireman curved"
+            }
+          ]
+        },
+        {
+          "bloco": 6,
+          "movimentos": [
+            {
+              "categoria": "B",
+              "nome": "Attitude – Heel"
+            },
+            {
+              "categoria": "B",
+              "nome": "Attitude – Knee"
+            },
+            {
+              "categoria": "B",
+              "nome": "Attitude – Free"
+            },
+            {
+              "categoria": "C",
+              "nome": "Attitude Heel 1 hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Attitude back"
+            },
+            {
+              "categoria": "E",
+              "nome": "Attitude back + chair"
+            },
+            {
+              "categoria": "E",
+              "nome": "Attitude back + hollywood + atitude (BHA)"
+            }
+          ]
+        },
+        {
+          "bloco": 7,
+          "movimentos": [
+            {
+              "categoria": "C",
+              "nome": "Chair"
+            },
+            {
+              "categoria": "C",
+              "nome": "Chair Back"
+            },
+            {
+              "categoria": "C",
+              "nome": "Jay"
+            },
+            {
+              "categoria": "C",
+              "nome": "Jay Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Chair cross"
+            },
+            {
+              "categoria": "D",
+              "nome": "Chair butterfly"
+            },
+            {
+              "categoria": "E",
+              "nome": "Chair P"
+            },
+            {
+              "categoria": "E",
+              "nome": "Chair running"
+            }
+          ]
+        },
+        {
+          "bloco": 8,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Vela"
+            },
+            {
+              "categoria": "A",
+              "nome": "Slide P"
+            },
+            {
+              "categoria": "A",
+              "nome": "Leg wave"
+            },
+            {
+              "categoria": "A",
+              "nome": "Body wave (1 – 7)"
+            },
+            {
+              "categoria": "A",
+              "nome": "Dive up (4/3/2 pontos)"
+            },
+            {
+              "categoria": "A",
+              "nome": "Kick Horse"
+            },
+            {
+              "categoria": "A",
+              "nome": "Back roll"
+            },
+            {
+              "categoria": "B",
+              "nome": "Leg wave kick"
+            },
+            {
+              "categoria": "B",
+              "nome": "Floor Inversion"
+            },
+            {
+              "categoria": "B",
+              "nome": "Slide kick P"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pole box 1"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pole box 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back roll passet"
+            },
+            {
+              "categoria": "C",
+              "nome": "Leg lock C"
+            },
+            {
+              "categoria": "C",
+              "nome": "Yoyo 1"
+            },
+            {
+              "categoria": "C",
+              "nome": "Slide Back"
+            },
+            {
+              "categoria": "C",
+              "nome": "Slide Open"
+            },
+            {
+              "categoria": "D",
+              "nome": "Log Roll"
+            }
+          ]
+        },
+        {
+          "bloco": 9,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Double Tap"
+            },
+            {
+              "categoria": "B",
+              "nome": "Carousel"
+            },
+            {
+              "categoria": "C",
+              "nome": "Carousel P"
+            },
+            {
+              "categoria": "D",
+              "nome": "Carousel + chair"
+            },
+            {
+              "categoria": "D",
+              "nome": "Carousel ext"
+            },
+            {
+              "categoria": "E",
+              "nome": "Carousel + attitude back"
+            },
+            {
+              "categoria": "E",
+              "nome": "Carousel + hook back"
+            },
+            {
+              "categoria": "E",
+              "nome": "Carousel + jay spin"
+            }
+          ]
+        },
+        {
+          "bloco": 10,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Basic seat"
+            },
+            {
+              "categoria": "B",
+              "nome": "Glamour seat"
+            },
+            {
+              "categoria": "B",
+              "nome": "Superman seat"
+            },
+            {
+              "categoria": "C",
+              "nome": "Crucifix seat"
+            },
+            {
+              "categoria": "C",
+              "nome": "Crucifix twist + crucifix curved"
+            },
+            {
+              "categoria": "C",
+              "nome": "Basic seat on top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Hook cross closed seat"
+            },
+            {
+              "categoria": "D",
+              "nome": "Crucifix twist + crucifix curved – Spinning mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Climb 1 (basic)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Free fall on top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Climb down spiral"
+            },
+            {
+              "categoria": "D",
+              "nome": "Climb down Jump 1"
+            },
+            {
+              "categoria": "D",
+              "nome": "Superman seat ext"
+            },
+            {
+              "categoria": "D",
+              "nome": "Scissor seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dolphin seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Eagle seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Climb 2 (basic i)"
+            },
+            {
+              "categoria": "E",
+              "nome": "Glamour hug seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Cradle + cradle seat ext"
+            },
+            {
+              "categoria": "E",
+              "nome": "Peter pan seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Spiderman seat"
+            },
+            {
+              "categoria": "E",
+              "nome": "Climb down jump 2"
+            }
+          ]
+        },
+        {
+          "bloco": 11,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Capoeira"
+            },
+            {
+              "categoria": "A",
+              "nome": "Teddy floor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Scissor simple"
+            },
+            {
+              "categoria": "B",
+              "nome": "Scissor super"
+            },
+            {
+              "categoria": "C",
+              "nome": "Humming bird"
+            },
+            {
+              "categoria": "C",
+              "nome": "Humming bird – Spinning mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Teddy on top + running girl"
+            },
+            {
+              "categoria": "D",
+              "nome": "Charm"
+            },
+            {
+              "categoria": "D",
+              "nome": "Hook back to charm – Spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Crescent moon"
+            },
+            {
+              "categoria": "E",
+              "nome": "Double scissor to floor"
+            },
+            {
+              "categoria": "E",
+              "nome": "Charm – Spinning mode"
+            }
+          ]
+        },
+        {
+          "bloco": 12,
+          "movimentos": [
+            {
+              "categoria": "D",
+              "nome": "Cradle simple + Spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Cradle 1 leg ext + spinning mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Inversion cradle"
+            }
+          ]
+        },
+        {
+          "bloco": 13,
+          "movimentos": [
+            {
+              "categoria": "B",
+              "nome": "Elbow stand educ"
+            },
+            {
+              "categoria": "C",
+              "nome": "Elbow stand (plie/split/passet/arco e flecha/horse)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Elbow stand split up and down"
+            },
+            {
+              "categoria": "E",
+              "nome": "Elbow stand pike up and down"
+            },
+            {
+              "categoria": "E",
+              "nome": "Elbow stand exit C to C"
+            },
+            {
+              "categoria": "E",
+              "nome": "Elbow stand exit for up"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nivel": 2,
+      "fonte_pdf": "docs/input/fichas-pdf/ficha de pole nivel 2 revisada aluno.pdf",
+      "marca_original_pdf": "Academia Nissei",
+      "checkboxes_por_movimento": 2,
+      "blocos": [
+        {
+          "bloco": 1,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Lock 4"
+            },
+            {
+              "categoria": "A",
+              "nome": "Inversion Basic"
+            },
+            {
+              "categoria": "B",
+              "nome": "Inverted Crucifix + Dismount superman"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dismount Spiral"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dismount Vertical"
+            },
+            {
+              "categoria": "C",
+              "nome": "Inversion Split Educ."
+            },
+            {
+              "categoria": "C",
+              "nome": "Spider"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dolphin + Dismount Dolphin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Dismount Front Roll"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dismount V"
+            }
+          ]
+        },
+        {
+          "bloco": 2,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Inversion Split"
+            },
+            {
+              "categoria": "B",
+              "nome": "Scorpion + Scorpion Pixie"
+            },
+            {
+              "categoria": "B",
+              "nome": "Gemini + Gemini Pixie"
+            },
+            {
+              "categoria": "C",
+              "nome": "Scorpion Hug"
+            },
+            {
+              "categoria": "C",
+              "nome": "Triangle"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dragon Fly"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversion Scorpion"
+            },
+            {
+              "categoria": "D",
+              "nome": "Triangle Pixie"
+            },
+            {
+              "categoria": "D",
+              "nome": "Bomb + Plank + Pike"
+            },
+            {
+              "categoria": "D",
+              "nome": "Hip Hold"
+            },
+            {
+              "categoria": "D",
+              "nome": "Scorpion Y"
+            },
+            {
+              "categoria": "E",
+              "nome": "Jade"
+            },
+            {
+              "categoria": "E",
+              "nome": "Scorpion Y Outside"
+            },
+            {
+              "categoria": "E",
+              "nome": "Scorpion + Dolphin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Crucifix 4"
+            },
+            {
+              "categoria": "E",
+              "nome": "Super triangle"
+            }
+          ]
+        },
+        {
+          "bloco": 3,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Inversion Basic – Super Slow"
+            },
+            {
+              "categoria": "B",
+              "nome": "Inversion Basic On Top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pole V"
+            },
+            {
+              "categoria": "C",
+              "nome": "Blade on top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Flatline"
+            },
+            {
+              "categoria": "D",
+              "nome": "Dragon"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversion Split on Top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Scorpio + Gemini"
+            },
+            {
+              "categoria": "D",
+              "nome": "Gemini + Scorpion"
+            },
+            {
+              "categoria": "E",
+              "nome": "Superman"
+            },
+            {
+              "categoria": "E",
+              "nome": "Butterfly"
+            },
+            {
+              "categoria": "E",
+              "nome": "Gemini Plank + Jamilla"
+            },
+            {
+              "categoria": "E",
+              "nome": "Helicopter Pump"
+            },
+            {
+              "categoria": "E",
+              "nome": "Blade To Blade"
+            }
+          ]
+        },
+        {
+          "bloco": 4,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Seat Jackknife"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Scissor Pixie"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Knot + Spinning Mode"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Split"
+            },
+            {
+              "categoria": "B",
+              "nome": "Lay Back + Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Lay Back Pixie"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Triangle + Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Inversion Back to Pole"
+            },
+            {
+              "categoria": "C",
+              "nome": "Lay Back + Board n' Close – Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Tail 1"
+            },
+            {
+              "categoria": "D",
+              "nome": "Plank"
+            },
+            {
+              "categoria": "E",
+              "nome": "Inverted Dove"
+            }
+          ]
+        },
+        {
+          "bloco": 5,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Scissor Full bracket"
+            },
+            {
+              "categoria": "A",
+              "nome": "Cradle Full Bracket Simple + Spinning Mode"
+            },
+            {
+              "categoria": "A",
+              "nome": "Scissor Cradle + Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Start hook grip floor (Cradle hook)"
+            },
+            {
+              "categoria": "B",
+              "nome": "Scissor Full Bracket + Cradle Full Bracket + Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Cradle Full Bracket Half Split + Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Cradle Full Bracket One Leg Ext (Leg1/Leg2) + Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Hook grip Spin (Cradle Hook)"
+            },
+            {
+              "categoria": "C",
+              "nome": "Cradle Full Bracket Split + Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Cradle Full Bracket Board + Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Cradle Full Bracket Jamilla + Spinning Mode"
+            }
+          ]
+        },
+        {
+          "bloco": 6,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Side Spin Half Split"
+            },
+            {
+              "categoria": "B",
+              "nome": "Side Spin Split"
+            },
+            {
+              "categoria": "C",
+              "nome": "Side Spin + Superman"
+            },
+            {
+              "categoria": "D",
+              "nome": "Jump Back Spin + Superman"
+            }
+          ]
+        },
+        {
+          "bloco": 7,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Boomerang Pose"
+            },
+            {
+              "categoria": "A",
+              "nome": "Boomerang Spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Chair Board"
+            },
+            {
+              "categoria": "A",
+              "nome": "Chair One Hand"
+            },
+            {
+              "categoria": "B",
+              "nome": "Boomerang Spin One Hand"
+            },
+            {
+              "categoria": "B",
+              "nome": "Boomerang Spin + Fireman Pull Up"
+            },
+            {
+              "categoria": "B",
+              "nome": "Carousel + Boomerang Spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Boomerang Jump + Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Flying Seat Hand Grip + Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Skater Hand Grip"
+            },
+            {
+              "categoria": "C",
+              "nome": "Boomerang on Top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Air Walk Hand Grip (2 pegadas) - Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Back Skater Hand Grip - Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pin P"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Mermaid"
+            }
+          ]
+        },
+        {
+          "bloco": 8,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Pirouette Elbow"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Love Pole"
+            },
+            {
+              "categoria": "A",
+              "nome": "Embrace Basic"
+            },
+            {
+              "categoria": "B",
+              "nome": "Ballerina in The Box – Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Embrace"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hook Cross Closed Elbow Grip – Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Seat Supreme Diva"
+            },
+            {
+              "categoria": "B",
+              "nome": "Seat Split Lover"
+            },
+            {
+              "categoria": "C",
+              "nome": "Boomerang Pose Elbow Grip"
+            },
+            {
+              "categoria": "C",
+              "nome": "Chair Elbow – Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Cradle Elbow Grip"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Divine Diva"
+            },
+            {
+              "categoria": "C",
+              "nome": "Skater Elbow Grip"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Hook Up Elbow Grip + Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Boomerang Elbow on Top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Carousel + Boomerang Elbow – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pin Elbow"
+            },
+            {
+              "categoria": "E",
+              "nome": "Samba Hold"
+            },
+            {
+              "categoria": "E",
+              "nome": "Air Walk Elbow Grip – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Back Skater Elbow Grip – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pin Hook Elbow + Spinning Mode"
+            }
+          ]
+        },
+        {
+          "bloco": 9,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Diva on Floor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Iguana Start"
+            },
+            {
+              "categoria": "A",
+              "nome": "Inverted Diva"
+            },
+            {
+              "categoria": "B",
+              "nome": "Log Roll 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Mill"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pirouette Badazz 1"
+            },
+            {
+              "categoria": "B",
+              "nome": "Yoyo 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Yoyo 3"
+            },
+            {
+              "categoria": "C",
+              "nome": "Yoyo 4"
+            },
+            {
+              "categoria": "C",
+              "nome": "Back Roll Split"
+            },
+            {
+              "categoria": "C",
+              "nome": "Juliete Roll"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pirouette Flying + Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Front Roll"
+            },
+            {
+              "categoria": "D",
+              "nome": "Back Roll V Ext"
+            },
+            {
+              "categoria": "D",
+              "nome": "Pirouette Badazz 2"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pirouette Badazz 3"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pirouette Diamond"
+            },
+            {
+              "categoria": "E",
+              "nome": "Vertical Jeté"
+            }
+          ]
+        },
+        {
+          "bloco": 10,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Climb 3 – Dolphin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Climb 4 – Side"
+            },
+            {
+              "categoria": "A",
+              "nome": "Climb 4 – Side – Spinning mode (2 direções)"
+            },
+            {
+              "categoria": "A",
+              "nome": "Climb Down Free Fall Slow"
+            },
+            {
+              "categoria": "B",
+              "nome": "Climb 5 - Slow"
+            },
+            {
+              "categoria": "C",
+              "nome": "Climb 6 – Slow I"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reiko Split"
+            },
+            {
+              "categoria": "D",
+              "nome": "Climb 8 – Forearm"
+            },
+            {
+              "categoria": "D",
+              "nome": "Climb 9 – Chinese"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reiko Split on Top"
+            }
+          ]
+        },
+        {
+          "bloco": 11,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Tango One Hand"
+            },
+            {
+              "categoria": "A",
+              "nome": "Spin Up Boomerang"
+            },
+            {
+              "categoria": "B",
+              "nome": "Spin Up Attitude Heel"
+            },
+            {
+              "categoria": "B",
+              "nome": "Spin Up Air Boomerang"
+            },
+            {
+              "categoria": "B",
+              "nome": "Rock Star Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Spin Up Cradle Basic"
+            },
+            {
+              "categoria": "C",
+              "nome": "Spin Up Cradle Full Bracket Simple"
+            },
+            {
+              "categoria": "D",
+              "nome": "Spin Up Pull Up"
+            },
+            {
+              "categoria": "D",
+              "nome": "Carrousel V"
+            },
+            {
+              "categoria": "E",
+              "nome": "Post Spin + Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Rock Star Spin – Spinning Mode"
+            }
+          ]
+        },
+        {
+          "bloco": 12,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Flying V – Spinning Mode"
+            },
+            {
+              "categoria": "B",
+              "nome": "Flying I – Spinning Mode"
+            },
+            {
+              "categoria": "C",
+              "nome": "Flying Split – Spinning Mode (Floor + Top)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Flying + Jump 5 – Spinning Mode"
+            }
+          ]
+        },
+        {
+          "bloco": 13,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Back Teddy Floor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Ballerina in The Box – Spinning Mode"
+            },
+            {
+              "categoria": "A",
+              "nome": "Humming Bird On Top"
+            },
+            {
+              "categoria": "A",
+              "nome": "Scissor One hand"
+            },
+            {
+              "categoria": "A",
+              "nome": "Teddy One Hand"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back Teddy On Top"
+            },
+            {
+              "categoria": "B",
+              "nome": "Teddy No Hands on Top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Corkscrew"
+            },
+            {
+              "categoria": "D",
+              "nome": "Corkscrew Attitude"
+            },
+            {
+              "categoria": "E",
+              "nome": "Teddy Spin – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Corkscrew Attitude One Hand"
+            },
+            {
+              "categoria": "E",
+              "nome": "Teddy No Support + Running Girl"
+            }
+          ]
+        },
+        {
+          "bloco": 14,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Estrela"
+            },
+            {
+              "categoria": "A",
+              "nome": "Handstand Educ."
+            },
+            {
+              "categoria": "B",
+              "nome": "Bridge Exit Educ. (Chão + Pole)"
+            },
+            {
+              "categoria": "B",
+              "nome": "Handstand Butterfly"
+            },
+            {
+              "categoria": "B",
+              "nome": "Handstand (1-5)"
+            },
+            {
+              "categoria": "C",
+              "nome": "Exit Hook Grip"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Split Up n'Down"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Cross"
+            },
+            {
+              "categoria": "E",
+              "nome": "Bridge Exit (Knee Hook)"
+            },
+            {
+              "categoria": "E",
+              "nome": "Handstand Pike Up n'Down"
+            }
+          ]
+        },
+        {
+          "bloco": 15,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Leg Lock"
+            },
+            {
+              "categoria": "A",
+              "nome": "Lock P Floor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat AK"
+            },
+            {
+              "categoria": "B",
+              "nome": "Ballerina Up To Pole"
+            },
+            {
+              "categoria": "B",
+              "nome": "Crescent Moon Open"
+            },
+            {
+              "categoria": "B",
+              "nome": "Knee Hook On Top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Knee Hook Mexicana"
+            },
+            {
+              "categoria": "C",
+              "nome": "Ballerina Up To Pole – Spinning Mode (2 direções)"
+            },
+            {
+              "categoria": "C",
+              "nome": "Ballerina Cupid"
+            },
+            {
+              "categoria": "C",
+              "nome": "Ballerina Sky & Bird"
+            },
+            {
+              "categoria": "C",
+              "nome": "Lock P On Top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Cradle Cross"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Side Pixie"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Bird + Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Genius"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Cross Genius"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Hook Down"
+            },
+            {
+              "categoria": "D",
+              "nome": "Seat Hook Up + Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Board n' Close + Hook + Lock P – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Leg Lock – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Shoulder Mount Educ. 1 (2 pegadas)"
+            },
+            {
+              "categoria": "E",
+              "nome": "Shoulder Mount Educ. 2 (2 pegadas + perna)"
+            }
+          ]
+        },
+        {
+          "bloco": 16,
+          "movimentos": [
+            {
+              "categoria": "B",
+              "nome": "Pirouette 2 hands + Reverse Grab Attitude"
+            },
+            {
+              "categoria": "B",
+              "nome": "Reverse Grab Attitude"
+            },
+            {
+              "categoria": "B",
+              "nome": "Reverse Grab Ext"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse Grab Simple"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse Grab Split"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Flying Basic Hands – Spinning Mode"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Grab Pretzel"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Grab Pretzel Attitude"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Grab Split + Fireman Ball"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Flying – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Grab Pretzel – Spinning Mode"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Grab Ext + Roll + Split"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nivel": 3,
+      "fonte_pdf": "docs/input/fichas-pdf/Ficha de pole Nível 3.pdf",
+      "marca_original_pdf": "ERGOSCAN Gaveacor",
+      "checkboxes_por_movimento": 4,
+      "observacoes": [
+        "PDF original é uma imagem (print to PDF), sem camada de texto — extração feita via OCR + leitura visual, cruzadas entre si.",
+        "Bloco 12, 2ª coluna, 1º item ('Arco e Flecha 1 hand') está sem a letra de categoria legível no PDF original."
+      ],
+      "blocos": [
+        {
+          "bloco": 1,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Seat Black Bird + Spinning"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Black Swan"
+            },
+            {
+              "categoria": "A",
+              "nome": "Divine Diva Extendido"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Falcon"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Crucifixp Twist Spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Swallow"
+            },
+            {
+              "categoria": "A",
+              "nome": "Seat Z"
+            },
+            {
+              "categoria": "B",
+              "nome": "Seat Knot Extendido"
+            },
+            {
+              "categoria": "B",
+              "nome": "Angel"
+            },
+            {
+              "categoria": "B",
+              "nome": "Angel No Hands"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back Roll + Superman"
+            },
+            {
+              "categoria": "B",
+              "nome": "Cradle No Hands + Frodo - Spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pole Box Elbow"
+            },
+            {
+              "categoria": "C",
+              "nome": "Bee/Bee Elbow"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dove > Head Figure"
+            },
+            {
+              "categoria": "C",
+              "nome": "Genius"
+            },
+            {
+              "categoria": "C",
+              "nome": "Seat Hook Y"
+            },
+            {
+              "categoria": "C",
+              "nome": "Tulipa"
+            },
+            {
+              "categoria": "C",
+              "nome": "Waterlily + Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Russian Butterfly"
+            },
+            {
+              "categoria": "D",
+              "nome": "Anastasia"
+            },
+            {
+              "categoria": "D",
+              "nome": "Angelical + Fly Bailarina + Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Elf + Spin - trava I"
+            },
+            {
+              "categoria": "D",
+              "nome": "Fairy + Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Genius 1 Leg Extendido"
+            },
+            {
+              "categoria": "D",
+              "nome": "Superwoman"
+            },
+            {
+              "categoria": "D",
+              "nome": "Tooth Brush + Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Tulip 1 Perna Extendida"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dead bailarina"
+            },
+            {
+              "categoria": "E",
+              "nome": "Sea Horse + Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Superman 2 (cradle fullbracket)"
+            },
+            {
+              "categoria": "E",
+              "nome": "Tulip Split - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Wonder Woman Extendido"
+            },
+            {
+              "categoria": "E",
+              "nome": "Superman Board"
+            }
+          ]
+        },
+        {
+          "bloco": 2,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Climb 10 - Jump 2"
+            },
+            {
+              "categoria": "B",
+              "nome": "Climb 11 - Side Together - spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Climb 12 - Scissor Pull Up"
+            },
+            {
+              "categoria": "C",
+              "nome": "Aerial Climb"
+            },
+            {
+              "categoria": "C",
+              "nome": "Climdown Dressmaker"
+            },
+            {
+              "categoria": "C",
+              "nome": "Climb 13 - Chicote"
+            },
+            {
+              "categoria": "E",
+              "nome": "Climb Slow 1 hand"
+            },
+            {
+              "categoria": "E",
+              "nome": "Climb 16 C+C e C+I"
+            },
+            {
+              "categoria": "E",
+              "nome": "Chicote + Blade"
+            },
+            {
+              "categoria": "E",
+              "nome": "Chicote + Subida Chinesa"
+            }
+          ]
+        },
+        {
+          "bloco": 3,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Back Hook + Inversão Básica"
+            },
+            {
+              "categoria": "A",
+              "nome": "Flying + Split"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back Hook + Split"
+            },
+            {
+              "categoria": "B",
+              "nome": "Flying Pull Up"
+            },
+            {
+              "categoria": "B",
+              "nome": "Inversão Split no Impulse"
+            },
+            {
+              "categoria": "C",
+              "nome": "Broken Doll - Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Inverted Flower - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversão Básica For Arm Twist on Floor"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversão Split for Arm Twist on floor"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversão Básica Back Teddy on floor"
+            },
+            {
+              "categoria": "D",
+              "nome": "Split no impulse on top"
+            },
+            {
+              "categoria": "E",
+              "nome": "Inversão Gemini Back Teddy on floor"
+            },
+            {
+              "categoria": "E",
+              "nome": "Flying boomerang - spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Flying boomerang split - spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Back flip - educativo"
+            }
+          ]
+        },
+        {
+          "bloco": 4,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Cradle Simples + Gemini - Spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Dolphin + Scorpion"
+            },
+            {
+              "categoria": "A",
+              "nome": "Inversão Básica 1 hand"
+            },
+            {
+              "categoria": "B",
+              "nome": "Gonfinho hug"
+            },
+            {
+              "categoria": "B",
+              "nome": "Scorpion Y Ext - spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Triângulo Knot - spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Front Aysha Basic Hand"
+            },
+            {
+              "categoria": "C",
+              "nome": "Inverted Scissor"
+            },
+            {
+              "categoria": "C",
+              "nome": "Jade One Hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Jade Fullbracket"
+            },
+            {
+              "categoria": "D",
+              "nome": "Cyclone Slow"
+            },
+            {
+              "categoria": "D",
+              "nome": "Gemini Outside + Gemini Outside Pixie"
+            }
+          ]
+        },
+        {
+          "bloco": 5,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Drop Dolphin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Drop Cradle"
+            },
+            {
+              "categoria": "B",
+              "nome": "Drop Knot"
+            },
+            {
+              "categoria": "C",
+              "nome": "Drop Gemini - Scorpion"
+            },
+            {
+              "categoria": "D",
+              "nome": "Drop Bomb"
+            },
+            {
+              "categoria": "E",
+              "nome": "Drop Trava p"
+            },
+            {
+              "categoria": "E",
+              "nome": "Cyclone"
+            }
+          ]
+        },
+        {
+          "bloco": 6,
+          "movimentos": [
+            {
+              "categoria": "B",
+              "nome": "Iguana"
+            },
+            {
+              "categoria": "B",
+              "nome": "Iguana Split"
+            },
+            {
+              "categoria": "C",
+              "nome": "Iguana Pike"
+            },
+            {
+              "categoria": "D",
+              "nome": "Ovito"
+            }
+          ]
+        },
+        {
+          "bloco": 7,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Back to Butterfly"
+            },
+            {
+              "categoria": "A",
+              "nome": "Cabriole"
+            },
+            {
+              "categoria": "A",
+              "nome": "Front Scissor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Piruete 2 hands + Front Scissor"
+            },
+            {
+              "categoria": "A",
+              "nome": "Scissor Cradle Fullbracket - spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Inversão Fullbracket - (volta no Jamila)"
+            },
+            {
+              "categoria": "B",
+              "nome": "Vertical Entrelacé"
+            },
+            {
+              "categoria": "B",
+              "nome": "Butterfly Twist"
+            },
+            {
+              "categoria": "B",
+              "nome": "Hero"
+            },
+            {
+              "categoria": "C",
+              "nome": "Bullet - Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Butterfly 1 hand Pixie"
+            },
+            {
+              "categoria": "C",
+              "nome": "Cradle Fullbracket on top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Inversion Fullbracket + Butterfly"
+            },
+            {
+              "categoria": "C",
+              "nome": "Juice"
+            },
+            {
+              "categoria": "C",
+              "nome": "Allegra Fullbracket + Butterfly"
+            },
+            {
+              "categoria": "D",
+              "nome": "Scissor Fullbracket + Cradle Fullbracket"
+            },
+            {
+              "categoria": "D",
+              "nome": "Allegra + Allegra Pixie"
+            },
+            {
+              "categoria": "D",
+              "nome": "Back Blade - spin (gira pra trás)"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inversão Jamila + Gemini"
+            },
+            {
+              "categoria": "E",
+              "nome": "Butterfly Extendido"
+            },
+            {
+              "categoria": "E",
+              "nome": "Inverted D"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Juice"
+            }
+          ]
+        },
+        {
+          "bloco": 8,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Flag Passet"
+            },
+            {
+              "categoria": "B",
+              "nome": "Flag Extendido"
+            },
+            {
+              "categoria": "C",
+              "nome": "Flag Split"
+            },
+            {
+              "categoria": "D",
+              "nome": "Flag Passet on top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Flag Extendido on top"
+            },
+            {
+              "categoria": "E",
+              "nome": "Flag Split on top"
+            }
+          ]
+        },
+        {
+          "bloco": 9,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Trava 4 Half Split"
+            },
+            {
+              "categoria": "A",
+              "nome": "Diva on top"
+            },
+            {
+              "categoria": "A",
+              "nome": "Bailarina + Butterfly on floor"
+            },
+            {
+              "categoria": "B",
+              "nome": "Bailarina Pixie - Spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Pole Box Feet"
+            },
+            {
+              "categoria": "B",
+              "nome": "Start hook grip on top"
+            },
+            {
+              "categoria": "C",
+              "nome": "Bailarina + Goddess - Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Bailarina To Bailarina - Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Helix"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pole Box no Feet"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reiko to Bailarina"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse to Bailarina"
+            },
+            {
+              "categoria": "D",
+              "nome": "Bailarina + Butterfly on top"
+            },
+            {
+              "categoria": "D",
+              "nome": "Banana Split"
+            },
+            {
+              "categoria": "D",
+              "nome": "Bailarina + Butterfly twist + Gemini Reverse Floor"
+            },
+            {
+              "categoria": "D",
+              "nome": "Small Cupid - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Tower of Pisa - Educ 1"
+            },
+            {
+              "categoria": "E",
+              "nome": "Bailarina + Butterfly twist + Gemini Reverse"
+            },
+            {
+              "categoria": "E",
+              "nome": "Bailarina to Reiko"
+            },
+            {
+              "categoria": "E",
+              "nome": "Icarus - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Pole box - Spin"
+            }
+          ]
+        },
+        {
+          "bloco": 10,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Carrosel V 1 hand"
+            },
+            {
+              "categoria": "A",
+              "nome": "Moon Running"
+            },
+            {
+              "categoria": "A",
+              "nome": "Reverse Grab Double Atitude"
+            },
+            {
+              "categoria": "A",
+              "nome": "Reverse Grab Jay Spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Reverse Grab Cross Pull Up"
+            },
+            {
+              "categoria": "B",
+              "nome": "Reverse Grab Split + Carrossel"
+            },
+            {
+              "categoria": "B",
+              "nome": "Inverse Reverse"
+            },
+            {
+              "categoria": "B",
+              "nome": "Combo P"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse Scissor"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse Grab Cradle"
+            },
+            {
+              "categoria": "C",
+              "nome": "Reverse Charm - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Grab - Board"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Grab Chopstik"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Charm Hug - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Reverse Flying Basic Hands - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Split on top"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Grab Cradle - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Flying on top - spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Waterfall on top - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Charm Split - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Split + Angel - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Reverse Flying Basic Hands + Split - Spin"
+            }
+          ]
+        },
+        {
+          "bloco": 11,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Scissor Shoulder Mont"
+            },
+            {
+              "categoria": "A",
+              "nome": "Shoulder Mont Educ - Grupado"
+            },
+            {
+              "categoria": "B",
+              "nome": "S.M Basic Twist on floor"
+            },
+            {
+              "categoria": "C",
+              "nome": "Hangman Twist & Basic Floor"
+            },
+            {
+              "categoria": "C",
+              "nome": "S.M. Basic Floor"
+            },
+            {
+              "categoria": "C",
+              "nome": "Dismount S.M."
+            },
+            {
+              "categoria": "D",
+              "nome": "S.M. Twist Split on Floor"
+            },
+            {
+              "categoria": "D",
+              "nome": "Teddy S.M. Twist & Basic on floor"
+            },
+            {
+              "categoria": "E",
+              "nome": "S.M. Basic Split on floor"
+            }
+          ]
+        },
+        {
+          "bloco": 12,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Inversão Trava p"
+            },
+            {
+              "categoria": "B",
+              "nome": "Trava P inverted Dove"
+            },
+            {
+              "categoria": "B",
+              "nome": "Titanic Educativo"
+            },
+            {
+              "categoria": "B",
+              "nome": "Arco e Flecha"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pencil"
+            },
+            {
+              "categoria": "C",
+              "nome": "Pencil Split"
+            },
+            {
+              "categoria": "D",
+              "nome": "Arco e Flecha pixie"
+            },
+            {
+              "categoria": "D",
+              "nome": "Back Monkey"
+            },
+            {
+              "categoria": "D",
+              "nome": "Arco e Flecha Mixed grip"
+            },
+            {
+              "categoria": "[DADO AUSENTE: categoria não legível no PDF original]",
+              "nome": "Arco e Flecha 1 hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inverted Dolphin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Inverted Dolphin Pixie"
+            },
+            {
+              "categoria": "D",
+              "nome": "Open Plank"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dangerous Bridge"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dismont Pencil Split"
+            }
+          ]
+        },
+        {
+          "bloco": 13,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Teddy Buddah"
+            },
+            {
+              "categoria": "A",
+              "nome": "Teddy Tree"
+            },
+            {
+              "categoria": "B",
+              "nome": "Bailarina in the box no hands - spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Teddy V 1 hand - Spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Back teddy V 1 hand - spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Teddy Z"
+            },
+            {
+              "categoria": "B",
+              "nome": "Namastê"
+            },
+            {
+              "categoria": "C",
+              "nome": "Jujuba Hold"
+            },
+            {
+              "categoria": "C",
+              "nome": "Chopstick Pixie"
+            },
+            {
+              "categoria": "C",
+              "nome": "Teddy Board"
+            },
+            {
+              "categoria": "D",
+              "nome": "Teddy Atitude - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Teddy + Watterfall"
+            },
+            {
+              "categoria": "E",
+              "nome": "Teddy split - spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Back Teddy Split - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Side Spin Forearm"
+            },
+            {
+              "categoria": "E",
+              "nome": "Yoguini on floor"
+            }
+          ]
+        },
+        {
+          "bloco": 14,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Handstand Catterpillar"
+            },
+            {
+              "categoria": "B",
+              "nome": "Caterpillar Educ 1"
+            },
+            {
+              "categoria": "C",
+              "nome": "Caterpillar Educ 2"
+            },
+            {
+              "categoria": "C",
+              "nome": "Caterpillar Pose"
+            },
+            {
+              "categoria": "D",
+              "nome": "Catterpillar"
+            },
+            {
+              "categoria": "E",
+              "nome": "Caterpillar Butterfly"
+            },
+            {
+              "categoria": "E",
+              "nome": "Aisha Closer"
+            }
+          ]
+        },
+        {
+          "bloco": 15,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Iguana Start Back Elbow"
+            },
+            {
+              "categoria": "B",
+              "nome": "Sad Pole Floor + Top"
+            },
+            {
+              "categoria": "B",
+              "nome": "Vortex"
+            },
+            {
+              "categoria": "C",
+              "nome": "Skater back Elbow - Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Elbow Secretary - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Corcscrew Double Elbow - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Teddy Split Elbow - Spin"
+            },
+            {
+              "categoria": "D",
+              "nome": "Sad Pole Floor + Top - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Flying Elbow + Waterfall - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Flying Elbow Split - spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Divine Elbow - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Atitude Knee Y Elbow Grip - Spin"
+            }
+          ]
+        },
+        {
+          "bloco": 16,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Blade Split + Spin"
+            },
+            {
+              "categoria": "A",
+              "nome": "Waterfall on Floor - Spin"
+            },
+            {
+              "categoria": "B",
+              "nome": "Goddess + Spin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Marley - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Back Dangerous Cupid - Spin"
+            },
+            {
+              "categoria": "E",
+              "nome": "Dangerous Cupid - Spin"
+            }
+          ]
+        },
+        {
+          "bloco": 17,
+          "movimentos": [
+            {
+              "categoria": "A",
+              "nome": "Handstand Butterfly Extendido"
+            },
+            {
+              "categoria": "B",
+              "nome": "Forearmstand Outside Carthweel"
+            },
+            {
+              "categoria": "B",
+              "nome": "Forearmstand Scorpion Educ"
+            },
+            {
+              "categoria": "C",
+              "nome": "Handstand Inside"
+            },
+            {
+              "categoria": "C",
+              "nome": "Handstand Split Inside"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Pike Inside"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand cross 1 hand"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Flamingo"
+            },
+            {
+              "categoria": "D",
+              "nome": "Forearmstand Scorpio 1"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Outside Carthweel"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Split Outside"
+            },
+            {
+              "categoria": "D",
+              "nome": "Handstand Pike Outside"
+            },
+            {
+              "categoria": "E",
+              "nome": "Exit Handstand Cross"
+            }
+          ]
+        },
+        {
+          "bloco": 18,
+          "movimentos": [
+            {
+              "categoria": "B",
+              "nome": "Power Seat Cradle"
+            },
+            {
+              "categoria": "B",
+              "nome": "Power Blade"
+            },
+            {
+              "categoria": "C",
+              "nome": "Power Pin"
+            },
+            {
+              "categoria": "C",
+              "nome": "Power Boomerang Pose"
+            },
+            {
+              "categoria": "C",
+              "nome": "Power Divine Diva"
+            },
+            {
+              "categoria": "D",
+              "nome": "Power Spiderman"
+            },
+            {
+              "categoria": "D",
+              "nome": "Power Teddy"
+            },
+            {
+              "categoria": "E",
+              "nome": "Power Cradle No hands"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

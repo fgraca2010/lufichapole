@@ -1,0 +1,22 @@
+---
+description: No invented data — fidelity to original ficha PDFs and LGPD masking rules
+alwaysApply: true
+---
+# Integridade de Dados e LGPD
+
+## Fidelidade aos dados originais
+- Nenhum dado de nível, movimento ou critério de evolução pode ser inventado.
+- Fonte única: PDFs em `docs/input/fichas-pdf/`. Extração deve ser literal.
+- Quando um dado necessário não estiver claro no PDF, usar
+  `[DADO AUSENTE: <descrição>]` em vez de assumir um valor.
+
+## LGPD
+- Dados pessoais sensíveis (CPF, endereço, telefone, data de nascimento completa)
+  ficam em claro no banco, mas mascarados na camada de apresentação para as
+  personas Professor e Admin.
+- Nunca expor esses campos sem máscara fora da persona Aluno (dono do dado).
+
+## Segredos
+- Nunca commitar chaves, senhas ou tokens. Apenas `.env.local` (gitignored) ou
+  variáveis de ambiente da Vercel/Supabase.
+- Nunca solicitar ou aceitar secrets colados diretamente no chat.
