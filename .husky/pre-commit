@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+echo "== pre-commit: lint =="
+npm run lint || exit 1
+
+echo "== pre-commit: testes unitários/funcionais (vitest) =="
+npm run test || exit 1
+
+if [ -f .env.test.local ]; then
+  echo "== pre-commit: testes de banco (lufichapoledev) =="
+  npm run test:db || exit 1
+else
+  echo "== pre-commit: .env.test.local não encontrado — pulando testes de banco =="
+  echo "   (isso só deve acontecer em outra máquina sem o banco de teste configurado)"
+fi

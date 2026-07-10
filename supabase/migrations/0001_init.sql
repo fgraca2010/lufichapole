@@ -284,6 +284,28 @@ $$;
 comment on function resumo_aluno is 'Números para o painel gamificado do Aluno: treinos (dias com ao menos 1 tentativa), exercícios completos/pendentes de avaliação, blocos 100% aprovados.';
 
 -- =========================================================================
+-- Grants de base (RLS só filtra linhas de quem já tem GRANT na tabela).
+-- Em projetos Supabase criados normalmente pelo painel isso já vem
+-- pré-configurado por padrão no schema public — declarado aqui explicitamente
+-- pra este schema não depender disso (funciona em qualquer Postgres/reset).
+-- =========================================================================
+grant usage on schema public to anon, authenticated, service_role;
+
+grant select, update, insert on perfis to authenticated;
+-- RLS ("..._admin" policies) restringe insert/update/delete de fato a persona admin.
+grant select, insert, update, delete on niveis, blocos, movimentos to authenticated;
+grant select, update on configuracao_sistema to authenticated;
+grant select, insert on tentativas_movimento to authenticated;
+grant select on aluno_movimento_status to authenticated;
+
+grant execute on function minha_persona() to authenticated;
+grant execute on function avaliar_movimento(uuid, bigint, boolean) to authenticated;
+grant execute on function resumo_aluno(uuid) to authenticated;
+
+grant all on all tables in schema public to service_role;
+grant all on all sequences in schema public to service_role;
+
+-- =========================================================================
 -- Row Level Security
 -- =========================================================================
 alter table perfis enable row level security;
