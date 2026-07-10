@@ -1,7 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 import { NavLink } from "./NavLink";
+
+function BotaoSair({ className }: { className: string }) {
+  // useFormStatus reflete o estado real do <form> pai (via action de
+  // servidor) — evita clique duplo e dá feedback visual se a rede estiver
+  // lenta, sem precisar de estado próprio nem duplicar lógica de sair().
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" disabled={pending} className={`${className} disabled:opacity-50`}>
+      {pending ? "Saindo..." : "Sair"}
+    </button>
+  );
+}
 
 export function NavPrincipal({
   itens,
@@ -31,12 +44,7 @@ export function NavPrincipal({
               </div>
             ))}
             <form action={sair}>
-              <button
-                type="submit"
-                className="w-full rounded-full px-3 py-1.5 text-left text-sm text-terciaria underline"
-              >
-                Sair
-              </button>
+              <BotaoSair className="w-full rounded-full px-3 py-1.5 text-left text-sm text-terciaria underline" />
             </form>
           </div>
         )}
@@ -50,9 +58,7 @@ export function NavPrincipal({
           </NavLink>
         ))}
         <form action={sair}>
-          <button type="submit" className="ml-2 text-sm text-terciaria underline">
-            Sair
-          </button>
+          <BotaoSair className="ml-2 text-sm text-terciaria underline" />
         </form>
       </div>
     </nav>

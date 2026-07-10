@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { mensagemErro } from "@/lib/erro";
 
 const COOKIE_MFA_VERIFICADO = "lu_mfa_verificado";
 
@@ -15,7 +16,9 @@ export async function enviarCodigoEmail() {
     options: { shouldCreateUser: false },
   });
 
-  if (error) return { erro: error.message };
+  if (error) {
+    return { erro: mensagemErro(error, "Não foi possível enviar o código. Tente de novo.") };
+  }
   return { erro: null };
 }
 

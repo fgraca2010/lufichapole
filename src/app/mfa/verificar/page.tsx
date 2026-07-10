@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useTransition } from "react";
+import { Suspense, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { enviarCodigoEmail, confirmarCodigoEmail } from "./actions";
 
@@ -21,6 +21,7 @@ function VerificarMfaConteudo() {
   const [codigo, setCodigo] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const jaTentouEnviarAutomaticamente = useRef(false);
 
   function enviar() {
     setErro(null);
@@ -30,6 +31,12 @@ function VerificarMfaConteudo() {
       else setEnviado(true);
     });
   }
+
+  useEffect(() => {
+    if (jaTentouEnviarAutomaticamente.current) return;
+    jaTentouEnviarAutomaticamente.current = true;
+    enviar();
+  }, []);
 
   function confirmar(e: React.FormEvent) {
     e.preventDefault();
@@ -53,16 +60,18 @@ function VerificarMfaConteudo() {
       {!enviado ? (
         <>
           <p className="max-w-sm text-sm text-terciaria">
-            Por segurança, vamos mandar um código de 6 dígitos pro seu e-mail
-            cadastrado.
+            Por segurança, estamos mandando um código de 6 dígitos pro seu
+            e-mail cadastrado...
           </p>
-          <button
-            onClick={enviar}
-            disabled={pending}
-            className="rounded-full bg-primaria px-4 py-2 font-medium text-primaria-texto disabled:opacity-50"
-          >
-            Enviar código
-          </button>
+          {erro && (
+            <button
+              onClick={enviar}
+              disabled={pending}
+              className="rounded-full bg-primaria px-4 py-2 font-medium text-primaria-texto disabled:opacity-50"
+            >
+              Tentar de novo
+            </button>
+          )}
         </>
       ) : (
         <>
@@ -88,7 +97,7 @@ function VerificarMfaConteudo() {
               Confirmar
             </button>
           </form>
-          <button onClick={enviar} disabled={pending} className="text-xs text-terciaria underline">
+          <button onClick={enviar} disabled={pending} className="text-xs text-secundaria underline">
             Reenviar código
           </button>
         </>

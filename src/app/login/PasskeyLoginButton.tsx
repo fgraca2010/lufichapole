@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { FingerprintIcon } from "@/components/FingerprintIcon";
 
 export function PasskeyLoginButton({ proximo }: { proximo: string }) {
   const supabase = createClient();
@@ -43,9 +44,10 @@ export function PasskeyLoginButton({ proximo }: { proximo: string }) {
         type="button"
         onClick={entrar}
         disabled={pending}
-        className="rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria disabled:opacity-50"
+        className="flex items-center justify-center gap-2 rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria disabled:opacity-50"
       >
-        🔒 Entrar com biometria
+        <FingerprintIcon />
+        Entrar com biometria
       </button>
       {erro && <p className="text-center text-xs text-secundaria">{erro}</p>}
     </div>
