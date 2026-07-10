@@ -1,5 +1,52 @@
 # HANDOFF
 
+## 2026-07-09/10 — Fases 1 a 4 concluídas (workspace, extração, scaffold, banco)
+
+### O que foi feito nesta sessão (continuação)
+- **Fase 3 (scaffold)**: Next.js (App Router, TS, Tailwind v4) criado em `src/`,
+  paleta da marca em `globals.css` (`--color-primaria` etc.), logo em
+  `public/logo-lu-fortuna.png`, página inicial provisória. `npm run build`/`dev`
+  testados e funcionando.
+- **Fase 4 (banco)**: schema completo em `supabase/migrations/0001_init.sql`
+  (`perfis`, `niveis`, `blocos`, `movimentos`, `configuracao_sistema`,
+  `tentativas_movimento`, `aluno_movimento_status`, RLS + grants, triggers,
+  funções `avaliar_movimento()` e `resumo_aluno()`). Regras de negócio novas
+  captadas em conversa: fluxo de avaliação do professor (pendente_avaliacao →
+  aprovado/em_andamento) e painel gamificado do aluno — ver `vault/_index.md`.
+  **Aplicado com sucesso em produção** (`lufichapole`) e no banco de teste
+  (`lufichapoledev`, projeto Supabase separado criado especificamente para os
+  testes automatizados).
+- **Testes automatizados**: Vitest (app, `tests/unit/`) + pgTAP (banco,
+  `supabase/tests/database/`, 50 assertions cobrindo trigger de tentativas,
+  avaliação do professor, RLS por persona, `resumo_aluno()`). Rodam via
+  `npm test` / `npm run test:db` / `npm run test:all`.
+- **Automação em todo commit**: Husky `pre-commit` (lint + vitest + pgTAP
+  contra `lufichapoledev`) + GitHub Actions (`.github/workflows/ci.yml`, usa
+  secrets do repo `SUPABASE_TEST_*`). Ambos verdes.
+- `gh auth login` e `supabase login` (via Personal Access Token) concluídos
+  pelo usuário. Push feito e CI passou.
+
+### Incidentes de segurança desta sessão (resolvidos, mas registrar)
+- A senha do banco de produção foi exposta em texto plano no chat **duas
+  vezes**: uma pelo usuário (mensagem inicial) e uma pelo assistente (bug ao
+  usar a ferramenta de edição de texto em arquivo `.env` já preenchido — a
+  edição por substring corrompeu a linha da senha, concatenando o valor na
+  linha vizinha, que depois foi impressa sem redigir). **Ambas as senhas
+  (produção e teste) foram rotacionadas pelo usuário após os incidentes.**
+- Lição aplicada: nunca mais usar a ferramenta de edição de texto (`Edit`) em
+  arquivos `.env*` que já tenham valores preenchidos — só leitura de
+  presença/tamanho sem imprimir valor, ou pedir pro usuário editar direto.
+- Um arquivo `.env.test.example` (não gitignored) chegou a ficar com valores
+  reais colados nele por engano — corrigido antes de qualquer commit (nunca
+  chegou a ir pro git).
+
+### Próximo passo imediato
+1. Fase 5 — Auth: email/senha + Google + Microsoft OAuth + 2FA por e-mail
+   (Supabase Auth não tem 2FA universal nativo pra todos os métodos — vai
+   precisar de um passo custom, ver `docs/adr/0001-schema-inicial.md`).
+2. Trigger de criação automática de `perfis` no signup (`auth.users`).
+3. Fase 6 — telas por persona (Aluno/Professor/Admin).
+
 ## 2026-07-09 — Setup inicial concluído
 
 ### O que foi feito

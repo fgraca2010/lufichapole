@@ -127,8 +127,28 @@ registrou ao menos 1 tentativa), **exercícios completos** (aprovados),
 ## Estado do setup (ver `HANDOFF.md` para o mais recente)
 
 - Workspace inicial criado (README/HANDOFF/AGENTS/vault).
-- CLIs instaladas: `gh`, `vercel`, `supabase`.
-- Vercel autenticado. GitHub e Supabase CLI: autenticação pendente do usuário.
-- `.env.local` preenchido pelo usuário diretamente (URL, anon key, service role
-  key, senha do banco pós-rotação) — nunca visto em texto pelo assistente.
-- Código da aplicação (`src/`) ainda não iniciado.
+- CLIs instaladas e autenticadas: `gh`, `vercel`, `supabase`.
+- Next.js scaffold criado e funcionando (`npm run dev`/`build`).
+- Schema do banco (Fase 4) aplicado em produção (`lufichapole`) e no projeto de
+  teste (`lufichapoledev`).
+- Testes automatizados (Vitest + pgTAP) rodando em todo commit (Husky) e no
+  CI (GitHub Actions).
+- `.env.local` (produção) e `.env.test.local` (teste) preenchidos pelo usuário
+  diretamente — valores nunca lidos/impressos pelo assistente (ver incidentes
+  de segurança em `HANDOFF.md` — ambas as senhas foram rotacionadas depois).
+
+## Infraestrutura de testes (2026-07-10)
+
+- Projeto Supabase separado **`lufichapoledev`** existe só pra testes
+  automatizados — nunca usar produção (`lufichapole`) pra isso.
+- Conexão via **Connection Pooler (Session mode)**, não a conexão direta
+  (`db.<ref>.supabase.co`) — a rede local não tem rota IPv6, e a conexão
+  direta do Supabase só expõe endereço IPv6 por padrão. Host do pooler:
+  `aws-<n>-<região>.pooler.supabase.com` (o `<n>` varia por projeto — testar
+  se não conectar de primeira).
+- `scripts/test-db.sh`: reseta o schema `public` do banco de TESTE do zero,
+  aplica migrations + seed, roda a suíte pgTAP. Nunca roda contra produção.
+- GitHub Actions usa secrets do repo (`SUPABASE_TEST_URL`,
+  `SUPABASE_TEST_DB_PASSWORD`, `SUPABASE_TEST_DB_POOLER_HOST`,
+  `SUPABASE_TEST_DB_POOLER_PORT`) — configurados via `gh secret set` direto do
+  `.env.test.local`, nunca visíveis em texto.
