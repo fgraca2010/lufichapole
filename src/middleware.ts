@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const ROTAS_PROTEGIDAS = ["/aluno", "/professor", "/admin"];
+const ROTAS_PROTEGIDAS = ["/aluno", "/professor", "/admin", "/perfil"];
 const COOKIE_MFA_VERIFICADO = "lu_mfa_verificado";
 
 export async function middleware(request: NextRequest) {
@@ -49,10 +49,21 @@ export async function middleware(request: NextRequest) {
     const mfaVerificado = request.cookies.get(COOKIE_MFA_VERIFICADO)?.value === "1";
 
     if (!mfaVerificado) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/mfa/verificar";
-      url.searchParams.set("proximo", path);
-      return NextResponse.redirect(url);
+      // Isenção restrita a contas de QA/teste (nunca setada via UI — ver
+      // supabase/migrations/0004_mfa_isento.sql). Consulta leve, só quando o
+      // cookie de MFA ainda não existe.
+      const { data: perfil } = await supabase
+        .from("perfis")
+        .select("mfa_isento")
+        .eq("id", user.id)
+        .single();
+
+      if (!perfil?.mfa_isento) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/mfa/verificar";
+        url.searchParams.set("proximo", path);
+        return NextResponse.redirect(url);
+      }
     }
   }
 
