@@ -29,18 +29,18 @@ export function ConvidarForm({
 
   return (
     <form ref={formRef} action={enviar} className="flex flex-wrap items-end gap-2 text-sm">
-      <div className="flex flex-col gap-1">
+      <div className="flex w-full flex-col gap-1 sm:w-auto">
         <label className="text-xs text-terciaria">Nome completo</label>
-        <input name="nome_completo" required className="rounded border border-terciaria/20 px-2 py-1" />
+        <input name="nome_completo" required className="w-full rounded border border-terciaria/20 px-2 py-1" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex w-full flex-col gap-1 sm:w-auto">
         <label className="text-xs text-terciaria">E-mail</label>
-        <input name="email" type="email" required className="rounded border border-terciaria/20 px-2 py-1" />
+        <input name="email" type="email" required className="w-full rounded border border-terciaria/20 px-2 py-1" />
       </div>
       {professores && (
-        <div className="flex flex-col gap-1">
+        <div className="flex w-full flex-col gap-1 sm:w-auto">
           <label className="text-xs text-terciaria">Professor</label>
-          <select name="professor_id" className="rounded border border-terciaria/20 px-2 py-1">
+          <select name="professor_id" className="w-full rounded border border-terciaria/20 px-2 py-1">
             <option value="">— sem vínculo ainda —</option>
             {professores.map((p) => (
               <option key={p.id} value={p.id}>
