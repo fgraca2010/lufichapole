@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ExcluirContaButton } from "./ExcluirContaButton";
+import { AvatarUpload } from "./AvatarUpload";
+import { VinculosSociais } from "./VinculosSociais";
 
 export default async function PerfilPage() {
   const supabase = await createClient();
@@ -9,7 +11,7 @@ export default async function PerfilPage() {
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("nome_completo, persona, data_nascimento, telefone")
+    .select("nome_completo, persona, data_nascimento, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -20,6 +22,8 @@ export default async function PerfilPage() {
   return (
     <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 px-6 py-8">
       <h1 className="text-xl font-semibold text-black">Meu perfil</h1>
+
+      <AvatarUpload userId={user.id} avatarUrlInicial={perfil?.avatar_url ?? null} />
 
       <dl className="flex flex-col gap-3 rounded-lg border border-terciaria/10 p-4 text-sm">
         <div className="flex justify-between gap-4">
@@ -35,18 +39,16 @@ export default async function PerfilPage() {
           <dd className="text-black">{dataNascimentoFormatada}</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt className="text-terciaria">Telefone</dt>
-          <dd className="text-black">{perfil?.telefone ?? "—"}</dd>
-        </div>
-        <div className="flex justify-between gap-4">
           <dt className="text-terciaria">Perfil</dt>
           <dd className="text-black capitalize">{perfil?.persona}</dd>
         </div>
       </dl>
 
+      <VinculosSociais />
+
       <p className="text-xs text-terciaria/70">
-        Pra alterar algum desses dados, fale com a administração da Lu Fortuna
-        Polesport.
+        Pra alterar nome ou data de nascimento, fale com a administração da Lu
+        Fortuna Polesport.
       </p>
 
       {perfil?.persona !== "admin" && (

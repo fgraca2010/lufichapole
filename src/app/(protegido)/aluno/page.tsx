@@ -62,20 +62,28 @@ export default async function AlunoPage({
         <Estatistica rotulo="Blocos completos" valor={r?.blocos_completos ?? 0} />
       </section>
 
-      <nav className="flex flex-wrap gap-2">
-        {(niveis ?? []).map((n) => (
-          <a
-            key={n.numero}
-            href={`/aluno?nivel=${n.numero}`}
-            className={
-              n.numero === nivelSelecionado
-                ? "rounded-full bg-primaria px-3 py-1.5 text-sm font-medium text-primaria-texto"
-                : "rounded-full px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
-            }
-          >
-            Nível {n.numero}
-          </a>
-        ))}
+      <nav className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap gap-2">
+          {(niveis ?? []).map((n) => (
+            <a
+              key={n.numero}
+              href={`/aluno?nivel=${n.numero}`}
+              className={
+                n.numero === nivelSelecionado
+                  ? "rounded-full bg-primaria px-3 py-1.5 text-sm font-medium text-primaria-texto"
+                  : "rounded-full px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
+              }
+            >
+              Nível {n.numero}
+            </a>
+          ))}
+        </div>
+        <a
+          href={`/aluno/ficha/${nivelSelecionado}/pdf`}
+          className="rounded-full border border-terciaria/30 px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
+        >
+          ⬇ Baixar ficha (PDF)
+        </a>
       </nav>
 
       {nivelAtual && (
