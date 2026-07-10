@@ -50,8 +50,8 @@ export function MovimentoRow({
   const podeRegistrar = status !== "aprovado";
 
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-terciaria/10 py-2">
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-terciaria/10 py-2">
+      <div className="flex min-w-0 basis-full items-center gap-2 sm:basis-auto sm:flex-1">
         {categoria && (
           <span className="shrink-0 rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
             {categoria}
@@ -60,7 +60,7 @@ export function MovimentoRow({
         <span className="truncate text-sm text-black">{nome}</span>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2 text-xs">
+      <div className="flex flex-wrap items-center gap-2 text-xs">
         <span
           className={
             status === "aprovado"
@@ -79,7 +79,7 @@ export function MovimentoRow({
             <button
               disabled={pending}
               onClick={() => registrar("sucesso")}
-              className="rounded-full bg-primaria px-2 py-1 text-primaria-texto disabled:opacity-50"
+              className="flex h-9 min-w-9 items-center justify-center rounded-full bg-primaria text-primaria-texto disabled:opacity-50"
               title="Registrar sucesso"
             >
               ✓
@@ -87,7 +87,7 @@ export function MovimentoRow({
             <button
               disabled={pending}
               onClick={() => registrar("erro")}
-              className="rounded-full bg-secundaria px-2 py-1 text-secundaria-texto disabled:opacity-50"
+              className="flex h-9 min-w-9 items-center justify-center rounded-full bg-secundaria text-secundaria-texto disabled:opacity-50"
               title="Registrar erro"
             >
               ✗

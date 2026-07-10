@@ -4,6 +4,7 @@ import { ExcluirContaButton } from "./ExcluirContaButton";
 import { AvatarUpload } from "./AvatarUpload";
 import { VinculosSociais } from "./VinculosSociais";
 import { EditarDadosPessoais } from "./EditarDadosPessoais";
+import { PasskeyManager } from "./PasskeyManager";
 
 export default async function PerfilPage() {
   const supabase = await createClient();
@@ -38,6 +39,8 @@ export default async function PerfilPage() {
       </div>
 
       <VinculosSociais />
+
+      <PasskeyManager />
 
       <p className="text-xs text-terciaria/70">
         E-mail e perfil (aluno/professor/admin) não podem ser alterados por

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { TrocarSenha } from "./TrocarSenha";
 
 type Identidade = { id: string; provider: string; identity_id: string };
 
@@ -77,6 +78,15 @@ export function VinculosSociais() {
 
       {(["email", "google"] as const).map((provider) => {
         const identidade = conectados.get(provider);
+
+        if (provider === "email" && identidade) {
+          return (
+            <div key={provider}>
+              <TrocarSenha />
+            </div>
+          );
+        }
+
         return (
           <div key={provider} className="flex items-center justify-between text-sm">
             <span className="text-black">{ROTULOS[provider]}</span>

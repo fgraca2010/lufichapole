@@ -36,38 +36,38 @@ export function AvaliacaoItem({
   if (decidido) return null;
 
   return (
-    <div className="flex flex-col gap-1 border-b border-terciaria/10 py-2">
-      <div className="flex items-center justify-between gap-3">
-        <div className="text-sm">
-          <span className="font-medium text-black">{alunoNome}</span>
-          <span className="text-terciaria">
-            {" — "}
-            {nivelNumero != null && `Nível ${nivelNumero} — `}
-            {blocoNumero != null && `Bloco ${blocoNumero} — `}
+    <div className="flex flex-col gap-2 border-b border-terciaria/10 py-2">
+      <div className="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm">
+        <span className="font-medium text-black">{alunoNome}</span>
+        <span className="text-terciaria">—</span>
+        {nivelNumero != null && (
+          <span className="text-terciaria">Nível {nivelNumero} —</span>
+        )}
+        {blocoNumero != null && (
+          <span className="text-terciaria">Bloco {blocoNumero} —</span>
+        )}
+        {categoria && (
+          <span className="rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
+            {categoria}
           </span>
-          {categoria && (
-            <span className="mr-1 rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
-              {categoria}
-            </span>
-          )}
-          <span className="text-terciaria">{movimentoNome}</span>
-        </div>
-        <div className="flex shrink-0 gap-2">
-          <button
-            disabled={pending}
-            onClick={() => avaliar(true)}
-            className="rounded-full bg-primaria px-3 py-1 text-xs font-medium text-primaria-texto disabled:opacity-50"
-          >
-            Confirmar
-          </button>
-          <button
-            disabled={pending}
-            onClick={() => avaliar(false)}
-            className="rounded-full bg-secundaria px-3 py-1 text-xs font-medium text-secundaria-texto disabled:opacity-50"
-          >
-            Treinar de novo
-          </button>
-        </div>
+        )}
+        <span className="text-terciaria">{movimentoNome}</span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          disabled={pending}
+          onClick={() => avaliar(true)}
+          className="rounded-full bg-primaria px-3 py-1.5 text-xs font-medium text-primaria-texto disabled:opacity-50"
+        >
+          Confirmar
+        </button>
+        <button
+          disabled={pending}
+          onClick={() => avaliar(false)}
+          className="rounded-full bg-secundaria px-3 py-1.5 text-xs font-medium text-secundaria-texto disabled:opacity-50"
+        >
+          Treinar de novo
+        </button>
       </div>
       {erro && <p className="text-xs text-secundaria">{erro}</p>}
     </div>

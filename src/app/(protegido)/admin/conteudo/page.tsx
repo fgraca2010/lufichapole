@@ -78,13 +78,13 @@ export default async function ConteudoAdminPage({
                     />
                   ))}
 
-                  <form action={criarMovimento} className="mt-2 flex items-center gap-2 text-sm">
+                  <form action={criarMovimento} className="mt-2 flex flex-wrap items-center gap-2 text-sm">
                     <input type="hidden" name="bloco_id" value={bloco.id} />
                     <input
                       name="nome"
                       placeholder="Novo movimento"
                       required
-                      className="min-w-40 flex-1 rounded border border-terciaria/20 px-2 py-1"
+                      className="min-w-0 flex-1 basis-full rounded border border-terciaria/20 px-2 py-1 sm:min-w-40 sm:basis-auto"
                     />
                     <select name="categoria" className="rounded border border-terciaria/20 px-2 py-1">
                       <option value="">—</option>
@@ -102,19 +102,19 @@ export default async function ConteudoAdminPage({
               </details>
             ))}
 
-          <form action={criarBloco} className="mt-4 flex items-center gap-2 text-sm">
+          <form action={criarBloco} className="mt-4 flex flex-wrap items-center gap-2 text-sm">
             <input type="hidden" name="nivel_id" value={nivelAtual.id} />
             <input
               name="numero"
               type="number"
               placeholder="Nº do novo bloco"
               required
-              className="w-40 rounded border border-terciaria/20 px-2 py-1"
+              className="w-full rounded border border-terciaria/20 px-2 py-1 sm:w-40"
             />
             <input
               name="nome"
               placeholder="Nome (opcional)"
-              className="flex-1 rounded border border-terciaria/20 px-2 py-1"
+              className="min-w-0 flex-1 rounded border border-terciaria/20 px-2 py-1"
             />
             <button className="rounded-full bg-terciaria px-3 py-1 text-xs font-medium text-terciaria-texto">
               Adicionar bloco

@@ -48,13 +48,13 @@ export default async function AdminAlunosPage() {
           {(alunos ?? []).map((a) => (
             <div
               key={a.id}
-              className="flex items-center justify-between gap-2 border-b border-terciaria/10 py-1.5 text-sm"
+              className="flex flex-wrap items-center justify-between gap-2 border-b border-terciaria/10 py-2 text-sm"
             >
-              <span className="flex items-center gap-2 text-black">
-                {a.nome_completo}
+              <span className="flex min-w-0 items-center gap-2 text-black">
+                <span className="truncate">{a.nome_completo}</span>
                 <Avatar avatarUrl={a.avatar_url} nome={a.nome_completo} />
               </span>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <VincularProfessor
                   alunoId={a.id}
                   professorIdAtual={a.professor_id}

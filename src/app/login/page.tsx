@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { entrarComSenha, entrarComOAuth } from "./actions";
+import { PasskeyLoginButton } from "./PasskeyLoginButton";
 
 export default async function LoginPage({
   searchParams,
@@ -39,6 +40,9 @@ export default async function LoginPage({
             required
             className="rounded-md border border-terciaria/30 px-3 py-2"
           />
+          <a href="/esqueci-senha" className="self-end text-xs text-terciaria underline">
+            Esqueci minha senha
+          </a>
         </div>
 
         {erro && <p className="text-sm text-secundaria">{erro}</p>}
@@ -67,6 +71,8 @@ export default async function LoginPage({
           Entrar com Google
         </button>
       </form>
+
+      <PasskeyLoginButton proximo={proximo} />
 
       <p className="max-w-sm text-center text-xs text-terciaria/60">
         Não tem uma conta? Fale com a administração da Lu Fortuna Polesport —

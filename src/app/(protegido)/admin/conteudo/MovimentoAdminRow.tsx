@@ -65,7 +65,7 @@ export function MovimentoAdminRow({
       <input
         value={nome}
         onChange={(e) => setNome(e.target.value)}
-        className="min-w-40 flex-1 rounded border border-terciaria/20 px-2 py-1"
+        className="min-w-0 flex-1 basis-full rounded border border-terciaria/20 px-2 py-1 sm:min-w-40 sm:basis-auto"
       />
       <select
         value={categoria}
