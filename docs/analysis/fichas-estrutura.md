@@ -25,30 +25,38 @@ dos 3 PDFs).
   leitura visual das páginas renderizadas — os dois métodos concordaram em
   100% dos itens verificados.
 
-## Pontos que **não podem ser assumidos** sem confirmação da Lu
+## Pontos esclarecidos pela Lu (2026-07-09)
 
-Marcados como `[DADO AUSENTE: ...]` no JSON/aqui, por não estarem
-explícitos nos PDFs originais:
+Os checkboxes dos PDFs originais **não** definem a regra de negócio — foram
+substituídos por uma regra configurável explicada pela Lu:
 
-1. **O que cada checkbox representa.** Os PDFs têm de 2 a 4 quadradinhos por
-   movimento, sem legenda. Pode ser: tentativas/repetições, colunas para datas
-   de avaliação, ou níveis de execução (ex. "iniciado/base/perfeito"). Isso
-   afeta diretamente o modelo de dados (Fase 4) — precisa ser confirmado antes
-   de desenhar a tabela de histórico de evolução.
-2. **O significado exato das letras A-E.** Parecem ser sub-graus de
-   dificuldade dentro do bloco (A = mais fácil, E = mais difícil), mas isso é
-   uma inferência, não um dado confirmado no documento.
-3. **Um item específico no Nível 3, Bloco 12** ("Arco e Flecha 1 hand") está
+1. **Significado dos checkboxes**: contagem de **sucessos consecutivos** do
+   aluno naquele movimento. Ao atingir a quantidade necessária, o movimento
+   fica "aprovado" permanentemente para aquele aluno.
+2. **Quantidade necessária de sucessos**: é **um único número global do
+   sistema** (não varia por nível/bloco/movimento), configurável pelo Admin.
+   Os PDFs originais tinham 4 (Níveis 1 e 3) ou 2 (Nível 2) quadradinhos —
+   isso era só o layout de cada academia de origem, não uma regra a preservar.
+   Ver regra completa de recálculo em `vault/_index.md`.
+3. **Letras A-E**: confirmado — são o **grau de dificuldade do movimento
+   dentro do bloco** (A = mais fácil, E = mais difícil). Editável pelo Admin
+   ao cadastrar/editar um movimento.
+4. Admin terá tela de **CRUD de blocos e movimentos** (criar, editar categoria
+   A-E, remover) — blocos/movimentos não são fixos, o seed inicial
+   (`movimentos.json`) é só o ponto de partida vindo das fichas originais.
+
+## Pendências residuais (ainda `[DADO AUSENTE]`)
+
+1. **Um item específico no Nível 3, Bloco 12** ("Arco e Flecha 1 hand") está
    sem a letra de categoria legível no PDF original (nem o OCR nem a leitura
    visual conseguiram recuperá-la) — marcado como `[DADO AUSENTE]` no JSON.
-4. Os PDFs de origem são de **outras academias** (Academia Nissei, ERGOSCAN
+   Vai precisar que alguém da Lu defina a dificuldade desse movimento
+   manualmente na tela de CRUD do Admin.
+2. Os PDFs de origem são de **outras academias** (Academia Nissei, ERGOSCAN
    Gaveacor) — usados só como fonte do conteúdo de movimentos, não como
    referência de identidade visual (essa vem da Lu Fortuna Polesport, ver
    `vault/_index.md`).
 
 ## Próximo passo
 
-Antes de modelar a tabela de evolução no Supabase (Fase 4), preciso que você
-confirme os pontos 1 e 2 acima — isso define se o histórico de evolução do
-aluno é "marquei o checkbox X na data Y" (mais simples) ou algo com múltiplos
-estados por movimento (mais complexo).
+Modelar o schema no Supabase (Fase 4) com as regras confirmadas acima.

@@ -1,11 +1,17 @@
 node_modules/
 .next/
+.out/
 .vercel
 .env
 .env.local
 .env*.local
 *.tmp
 .DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+coverage/
 
 # Obsidian workspace cache (não versionar; conteúdo do vault sim)
 vault/.obsidian/workspace*.json

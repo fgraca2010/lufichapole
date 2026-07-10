@@ -56,6 +56,54 @@
   qual professor.
 - Também vê os dados mascarados (mesmo eles não estando mascarados no banco).
 
+## Regra de negócio: aprovação em movimento (2026-07-09)
+
+- Cada movimento tem uma **categoria A-E** = grau de dificuldade dentro do
+  bloco (A mais fácil, E mais difícil). Definida pelo Admin ao cadastrar o
+  movimento.
+- Aluno registra tentativas de um movimento: **sucesso** (incrementa a
+  contagem de sucessos consecutivos) ou **erro** (zera a contagem daquele
+  movimento para aquele aluno).
+- Existe uma **quantidade necessária de sucessos consecutivos** para um
+  movimento ser considerado "aprovado" — **um único número global do
+  sistema** (não varia por nível, bloco ou movimento), configurável pelo
+  Admin numa tela de configuração. Valor inicial de referência: 4 (mas isso
+  é só um ponto de partida, não veio de regra de negócio real dos PDFs
+  originais — os PDFs tinham 2 ou 4 quadradinhos dependendo da academia de
+  origem, sem relação com essa regra).
+- **Aprovação não é automática ao bater a sequência.** Ao atingir a
+  quantidade necessária, o movimento fica **"pendente de avaliação"** — some
+  da fila de treino do aluno e aparece pro **professor vinculado** como
+  pendente. O aluno faz o movimento pro professor **fora do app**; o
+  professor então, dentro do app, confirma ("ok", aprova definitivo) ou manda
+  treinar de novo (zera a contagem de sucessos, volta pra andamento normal).
+  Essa é a **única exceção** à regra "professor não edita ficha do aluno" —
+  só vale pra essa avaliação, e só o professor vinculado (não o Admin) pode
+  fazer. Confirmado com a Lu em 2026-07-09.
+- Mesmo com uma avaliação pendente, **o aluno continua podendo registrar
+  tentativas normalmente** naquele movimento; se der erro nesse meio tempo, a
+  contagem zera e ele volta a treinar (some da fila de avaliação do
+  professor).
+- **Uma vez aprovado pelo professor, o movimento fica aprovado
+  permanentemente** para aquele aluno, mesmo que a quantidade necessária
+  global aumente depois.
+- Se a quantidade necessária **diminuir**, todo aluno que já tinha uma
+  contagem de sucessos consecutivos >= à nova quantidade volta a ficar
+  **pendente de avaliação** (não aprovado direto — ainda passa pelo
+  professor).
+
+## Painel gamificado do Aluno (2026-07-09)
+
+Tela do Aluno mostra um resumo numérico: total de **treinos** (dias em que
+registrou ao menos 1 tentativa), **exercícios completos** (aprovados),
+**exercícios aguardando avaliação do professor**, e **blocos 100% completos**.
+- Toda tentativa (sucesso ou erro) é um evento com data — esse log de eventos
+  é também o **histórico de aulas/atividades** do aluno (ver persona Aluno).
+- Admin tem tela de **CRUD de blocos e movimentos**: criar bloco, criar/editar/
+  remover movimento dentro do bloco, definindo nome, nível, bloco e categoria
+  A-E. O seed inicial (`docs/analysis/movimentos.json`, extraído das fichas
+  PDF originais) é só o ponto de partida — não é uma lista fixa/imutável.
+
 ## Regras de negócio e compliance
 
 - **Fidelidade aos dados originais**: nenhum dado de nível/movimento/critério de
