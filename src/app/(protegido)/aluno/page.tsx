@@ -29,7 +29,7 @@ export default async function AlunoPage({
       supabase.from("configuracao_sistema").select("sucessos_necessarios").single(),
       supabase
         .from("niveis")
-        .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo))")
+        .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo, ordem))")
         .order("numero"),
       supabase
         .from("aluno_movimento_status")
@@ -90,6 +90,7 @@ export default async function AlunoPage({
                 <div className="mt-2">
                   {bloco.movimentos
                     ?.filter((m) => m.ativo)
+                    .sort((a, b) => a.ordem - b.ordem)
                     .map((mov) => {
                       const s = statusPorMovimento.get(mov.id);
                       return (

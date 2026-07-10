@@ -21,10 +21,10 @@ export default async function ConteudoAdminPage({
 
   const { data: niveis } = await supabase
     .from("niveis")
-    .select("id, numero, nome, blocos(id, numero, nome, movimentos(id, nome, categoria, ativo))")
+    .select("id, numero, nome, blocos(id, numero, nome, movimentos(id, nome, categoria, ativo, ordem))")
     .order("numero");
 
-  type Movimento = { id: number; nome: string; categoria: string | null; ativo: boolean };
+  type Movimento = { id: number; nome: string; categoria: string | null; ativo: boolean; ordem: number };
   type Bloco = { id: number; numero: number; nome: string | null; movimentos: Movimento[] | null };
   type Nivel = { id: number; numero: number; nome: string; blocos: Bloco[] | null };
 
@@ -68,7 +68,7 @@ export default async function ConteudoAdminPage({
                 </summary>
 
                 <div className="mt-2">
-                  {bloco.movimentos?.map((m) => (
+                  {bloco.movimentos?.sort((a, b) => a.ordem - b.ordem).map((m) => (
                     <MovimentoAdminRow
                       key={m.id}
                       id={m.id}

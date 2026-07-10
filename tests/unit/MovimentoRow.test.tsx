@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MovimentoRow } from "@/app/(protegido)/aluno/MovimentoRow";
 
 vi.mock("@/app/(protegido)/aluno/actions", () => ({
   registrarTentativa: vi.fn(async () => ({ erro: null })),
+  reiniciarMovimento: vi.fn(async () => ({ erro: null })),
 }));
 
 describe("MovimentoRow", () => {
@@ -54,5 +56,25 @@ describe("MovimentoRow", () => {
     expect(screen.queryByTitle("Registrar sucesso")).not.toBeInTheDocument();
     expect(screen.queryByTitle("Registrar erro")).not.toBeInTheDocument();
     expect(screen.getByText("Aprovado")).toBeInTheDocument();
+  });
+
+  it("mostra aviso de perda de aprovação antes de confirmar o reinício", async () => {
+    const user = userEvent.setup();
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="aprovado"
+        sucessosConsecutivos={4}
+        sucessosNecessarios={4}
+      />
+    );
+
+    await user.click(screen.getByText("Recomeçar"));
+
+    expect(screen.getByText(/perde a aprovação/)).toBeInTheDocument();
+    expect(screen.getByText("Sim, recomeçar")).toBeInTheDocument();
+    expect(screen.getByText("Cancelar")).toBeInTheDocument();
   });
 });

@@ -62,6 +62,8 @@ export default async function ProfessorAvaliacoesPage() {
           movimentoId={linha.movimento_id}
           movimentoNome={linha.movimentos?.nome ?? "?"}
           categoria={linha.movimentos?.categoria ?? null}
+          nivelNumero={linha.movimentos?.blocos?.niveis?.numero ?? null}
+          blocoNumero={linha.movimentos?.blocos?.numero ?? null}
         />
       ))}
     </div>

@@ -19,3 +19,16 @@ export async function registrarTentativa(movimentoId: number, resultado: "sucess
   revalidatePath("/aluno");
   return { erro: null };
 }
+
+/** Ação voluntária: abre mão de uma aprovação já conquistada pra treinar de novo do zero. */
+export async function reiniciarMovimento(movimentoId: number) {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("reiniciar_movimento_aprovado", {
+    p_movimento_id: movimentoId,
+  });
+
+  if (error) return { erro: error.message };
+
+  revalidatePath("/aluno");
+  return { erro: null };
+}

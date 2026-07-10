@@ -38,7 +38,7 @@ export default async function FichaAlunoPage({
     supabase.rpc("resumo_aluno", { p_aluno_id: id }).single(),
     supabase
       .from("niveis")
-      .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo))")
+      .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo, ordem))")
       .order("numero"),
     supabase
       .from("aluno_movimento_status")
@@ -98,6 +98,7 @@ export default async function FichaAlunoPage({
                 <div className="mt-2">
                   {bloco.movimentos
                     ?.filter((m) => m.ativo)
+                    .sort((a, b) => a.ordem - b.ordem)
                     .map((mov) => {
                       const s = statusPorMovimento.get(mov.id);
                       const st = s?.status ?? "em_andamento";

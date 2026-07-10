@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { registrarTentativa } from "./actions";
+import { registrarTentativa, reiniciarMovimento } from "./actions";
 
 type Props = {
   movimentoId: number;
@@ -28,12 +28,22 @@ export function MovimentoRow({
 }: Props) {
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState<string | null>(null);
+  const [confirmandoReinicio, setConfirmandoReinicio] = useState(false);
 
   function registrar(resultado: "sucesso" | "erro") {
     setErro(null);
     startTransition(async () => {
       const r = await registrarTentativa(movimentoId, resultado);
       if (r.erro) setErro(r.erro);
+    });
+  }
+
+  function reiniciar() {
+    setErro(null);
+    startTransition(async () => {
+      const r = await reiniciarMovimento(movimentoId);
+      if (r.erro) setErro(r.erro);
+      else setConfirmandoReinicio(false);
     });
   }
 
@@ -84,7 +94,42 @@ export function MovimentoRow({
             </button>
           </>
         )}
+
+        {status === "aprovado" && !confirmandoReinicio && (
+          <button
+            onClick={() => setConfirmandoReinicio(true)}
+            className="text-terciaria/50 underline"
+            title="Recomeçar este movimento do zero"
+          >
+            Recomeçar
+          </button>
+        )}
       </div>
+
+      {status === "aprovado" && confirmandoReinicio && (
+        <div className="w-full rounded-md bg-secundaria/10 p-2 text-xs">
+          <p className="text-black">
+            Se continuar, você <strong>perde a aprovação</strong> neste
+            movimento e precisa treinar do zero de novo. Tem certeza?
+          </p>
+          <div className="mt-1 flex gap-2">
+            <button
+              disabled={pending}
+              onClick={reiniciar}
+              className="rounded-full bg-secundaria px-3 py-1 font-medium text-secundaria-texto disabled:opacity-50"
+            >
+              Sim, recomeçar
+            </button>
+            <button
+              onClick={() => setConfirmandoReinicio(false)}
+              className="rounded-full border border-terciaria/30 px-3 py-1 text-terciaria"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
       {erro && <p className="w-full text-xs text-secundaria">{erro}</p>}
     </div>
   );

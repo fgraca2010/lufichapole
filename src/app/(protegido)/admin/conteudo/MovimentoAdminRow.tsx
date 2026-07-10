@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { atualizarMovimento } from "./actions";
+import { atualizarMovimento, moverMovimento } from "./actions";
 
 const CATEGORIAS = ["A", "B", "C", "D", "E"];
 
@@ -34,8 +34,34 @@ export function MovimentoAdminRow({
     });
   }
 
+  function mover(direcao: "cima" | "baixo") {
+    setErro(null);
+    startTransition(async () => {
+      const r = await moverMovimento(id, direcao);
+      if (r.erro) setErro(r.erro);
+    });
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-terciaria/10 py-1.5 text-sm">
+      <div className="flex flex-col">
+        <button
+          onClick={() => mover("cima")}
+          disabled={pending}
+          title="Mover pra cima"
+          className="leading-none text-terciaria hover:text-primaria disabled:opacity-50"
+        >
+          ▲
+        </button>
+        <button
+          onClick={() => mover("baixo")}
+          disabled={pending}
+          title="Mover pra baixo"
+          className="leading-none text-terciaria hover:text-primaria disabled:opacity-50"
+        >
+          ▼
+        </button>
+      </div>
       <input
         value={nome}
         onChange={(e) => setNome(e.target.value)}

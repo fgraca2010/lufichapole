@@ -9,12 +9,16 @@ export function AvaliacaoItem({
   movimentoId,
   movimentoNome,
   categoria,
+  nivelNumero,
+  blocoNumero,
 }: {
   alunoId: string;
   alunoNome: string;
   movimentoId: number;
   movimentoNome: string;
   categoria: string | null;
+  nivelNumero: number | null;
+  blocoNumero: number | null;
 }) {
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState<string | null>(null);
@@ -36,7 +40,11 @@ export function AvaliacaoItem({
       <div className="flex items-center justify-between gap-3">
         <div className="text-sm">
           <span className="font-medium text-black">{alunoNome}</span>
-          <span className="text-terciaria"> — </span>
+          <span className="text-terciaria">
+            {" — "}
+            {nivelNumero != null && `Nível ${nivelNumero} — `}
+            {blocoNumero != null && `Bloco ${blocoNumero} — `}
+          </span>
           {categoria && (
             <span className="mr-1 rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
               {categoria}
