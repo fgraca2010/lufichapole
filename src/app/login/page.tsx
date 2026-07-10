@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { entrarComSenha, entrarComOAuth } from "./actions";
 import { PasskeyLoginButton } from "./PasskeyLoginButton";
+import { CampoSenha } from "@/components/CampoSenha";
+import { GoogleLogo } from "@/components/GoogleLogo";
 
 export default async function LoginPage({
   searchParams,
@@ -30,16 +32,7 @@ export default async function LoginPage({
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="senha" className="text-sm font-medium text-terciaria">
-            Senha
-          </label>
-          <input
-            id="senha"
-            name="senha"
-            type="password"
-            required
-            className="rounded-md border border-terciaria/30 px-3 py-2"
-          />
+          <CampoSenha name="senha" label="Senha" autoComplete="current-password" />
           <a href="/esqueci-senha" className="self-end text-xs text-terciaria underline">
             Esqueci minha senha
           </a>
@@ -61,13 +54,15 @@ export default async function LoginPage({
         </div>
 
         <button
-          type="button"
+          type="submit"
+          formNoValidate
           formAction={async () => {
             "use server";
             await entrarComOAuth("google");
           }}
-          className="rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria"
+          className="flex items-center justify-center gap-2 rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria"
         >
+          <GoogleLogo />
           Entrar com Google
         </button>
       </form>

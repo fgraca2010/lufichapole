@@ -90,7 +90,7 @@ export function EditarDadosPessoais({
         <button
           type="button"
           onClick={() => setEditando(false)}
-          className="rounded-full border border-terciaria/30 px-4 py-1.5 text-terciaria"
+          className="rounded-full border border-secundaria px-4 py-1.5 text-secundaria"
         >
           Cancelar
         </button>

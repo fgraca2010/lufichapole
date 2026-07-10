@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { validarComplexidadeSenha } from "@/lib/senha";
+import { mensagemErro } from "@/lib/erro";
 
 export async function trocarSenha(senhaAtual: string, novaSenha: string) {
   const supabase = await createClient();
@@ -22,7 +23,7 @@ export async function trocarSenha(senhaAtual: string, novaSenha: string) {
   if (erroSenhaAtual) return { erro: "Senha atual incorreta." };
 
   const { error } = await supabase.auth.updateUser({ password: novaSenha });
-  if (error) return { erro: error.message };
+  if (error) return { erro: mensagemErro(error, "Não foi possível trocar a senha. Tente de novo.") };
 
   return { erro: null };
 }
