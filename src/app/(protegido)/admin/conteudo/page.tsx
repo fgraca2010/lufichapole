@@ -3,7 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import { MovimentoAdminRow } from "./MovimentoAdminRow";
 import { criarMovimento, criarBloco } from "./actions";
 
-export default async function ConteudoAdminPage() {
+export default async function ConteudoAdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ nivel?: string }>;
+}) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
@@ -24,62 +28,82 @@ export default async function ConteudoAdminPage() {
   type Bloco = { id: number; numero: number; nome: string | null; movimentos: Movimento[] | null };
   type Nivel = { id: number; numero: number; nome: string; blocos: Bloco[] | null };
 
+  const todosNiveis = (niveis as unknown as Nivel[] | null) ?? [];
+  const { nivel: nivelParam } = await searchParams;
+  const nivelSelecionado = Number(nivelParam) || todosNiveis[0]?.numero || 1;
+  const nivelAtual = todosNiveis.find((n) => n.numero === nivelSelecionado);
+
   return (
-    <div className="flex flex-1 flex-col gap-8 px-6 py-8">
-      <a href="/admin" className="text-sm text-terciaria underline">
-        ← Voltar
-      </a>
+    <div className="flex flex-1 flex-col gap-6 px-6 py-8">
       <h1 className="text-xl font-semibold text-black">Blocos e movimentos</h1>
 
-      {(niveis as unknown as Nivel[] | null ?? []).map((nivel) => (
-        <section key={nivel.id}>
+      <nav className="flex flex-wrap gap-2">
+        {todosNiveis.map((n) => (
+          <a
+            key={n.numero}
+            href={`/admin/conteudo?nivel=${n.numero}`}
+            className={
+              n.numero === nivelSelecionado
+                ? "rounded-full bg-primaria px-3 py-1.5 text-sm font-medium text-primaria-texto"
+                : "rounded-full px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
+            }
+          >
+            Nível {n.numero}
+          </a>
+        ))}
+      </nav>
+
+      {nivelAtual && (
+        <section>
           <h2 className="mb-3 text-lg font-semibold text-black">
-            Nível {nivel.numero} — {nivel.nome}
+            Nível {nivelAtual.numero} — {nivelAtual.nome}
           </h2>
 
-          {nivel.blocos
+          {nivelAtual.blocos
             ?.sort((a, b) => a.numero - b.numero)
             .map((bloco) => (
-              <div key={bloco.id} className="mb-6">
-                <h3 className="mb-2 text-sm font-semibold text-terciaria">
-                  Bloco {bloco.numero}
-                </h3>
+              <details key={bloco.id} className="mb-3 rounded-lg border border-terciaria/10 p-3">
+                <summary className="cursor-pointer text-sm font-semibold text-terciaria">
+                  Bloco {bloco.numero} ({bloco.movimentos?.length ?? 0} movimentos)
+                </summary>
 
-                {bloco.movimentos?.map((m) => (
-                  <MovimentoAdminRow
-                    key={m.id}
-                    id={m.id}
-                    nome={m.nome}
-                    categoria={m.categoria}
-                    ativo={m.ativo}
-                  />
-                ))}
+                <div className="mt-2">
+                  {bloco.movimentos?.map((m) => (
+                    <MovimentoAdminRow
+                      key={m.id}
+                      id={m.id}
+                      nome={m.nome}
+                      categoria={m.categoria}
+                      ativo={m.ativo}
+                    />
+                  ))}
 
-                <form action={criarMovimento} className="mt-2 flex items-center gap-2 text-sm">
-                  <input type="hidden" name="bloco_id" value={bloco.id} />
-                  <input
-                    name="nome"
-                    placeholder="Novo movimento"
-                    required
-                    className="min-w-40 flex-1 rounded border border-terciaria/20 px-2 py-1"
-                  />
-                  <select name="categoria" className="rounded border border-terciaria/20 px-2 py-1">
-                    <option value="">—</option>
-                    {["A", "B", "C", "D", "E"].map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                  <button className="rounded-full bg-terciaria px-3 py-1 text-xs font-medium text-terciaria-texto">
-                    Adicionar
-                  </button>
-                </form>
-              </div>
+                  <form action={criarMovimento} className="mt-2 flex items-center gap-2 text-sm">
+                    <input type="hidden" name="bloco_id" value={bloco.id} />
+                    <input
+                      name="nome"
+                      placeholder="Novo movimento"
+                      required
+                      className="min-w-40 flex-1 rounded border border-terciaria/20 px-2 py-1"
+                    />
+                    <select name="categoria" className="rounded border border-terciaria/20 px-2 py-1">
+                      <option value="">—</option>
+                      {["A", "B", "C", "D", "E"].map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                    <button className="rounded-full bg-terciaria px-3 py-1 text-xs font-medium text-terciaria-texto">
+                      Adicionar
+                    </button>
+                  </form>
+                </div>
+              </details>
             ))}
 
-          <form action={criarBloco} className="flex items-center gap-2 text-sm">
-            <input type="hidden" name="nivel_id" value={nivel.id} />
+          <form action={criarBloco} className="mt-4 flex items-center gap-2 text-sm">
+            <input type="hidden" name="nivel_id" value={nivelAtual.id} />
             <input
               name="numero"
               type="number"
@@ -97,7 +121,7 @@ export default async function ConteudoAdminPage() {
             </button>
           </form>
         </section>
-      ))}
+      )}
     </div>
   );
 }

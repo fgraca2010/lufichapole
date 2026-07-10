@@ -9,8 +9,10 @@ const ROTULO_STATUS: Record<string, string> = {
 
 export default async function FichaAlunoPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ nivel?: string }>;
 }) {
   const { id } = await params;
   const supabase = await createClient();
@@ -52,6 +54,10 @@ export default async function FichaAlunoPage({
     blocos_completos: number;
   } | null;
 
+  const { nivel: nivelParam } = await searchParams;
+  const nivelSelecionado = Number(nivelParam) || niveis?.[0]?.numero || 1;
+  const nivelAtual = (niveis ?? []).find((n) => n.numero === nivelSelecionado);
+
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
       <h1 className="text-xl font-semibold text-black">{aluno.nome_completo}</h1>
@@ -64,53 +70,69 @@ export default async function FichaAlunoPage({
         <Estatistica rotulo="Blocos completos" valor={r?.blocos_completos ?? 0} />
       </section>
 
-      {(niveis ?? []).map((nivel) => (
-        <section key={nivel.numero}>
-          <h2 className="mb-3 text-lg font-semibold text-black">
-            Nível {nivel.numero}
-            {nivel.nome ? ` — ${nivel.nome}` : ""}
-          </h2>
-          {nivel.blocos
+      <nav className="flex flex-wrap gap-2">
+        {(niveis ?? []).map((n) => (
+          <a
+            key={n.numero}
+            href={`/professor/alunos/${id}?nivel=${n.numero}`}
+            className={
+              n.numero === nivelSelecionado
+                ? "rounded-full bg-primaria px-3 py-1.5 text-sm font-medium text-primaria-texto"
+                : "rounded-full px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
+            }
+          >
+            Nível {n.numero}
+          </a>
+        ))}
+      </nav>
+
+      {nivelAtual && (
+        <section>
+          {nivelAtual.blocos
             ?.sort((a, b) => a.numero - b.numero)
             .map((bloco) => (
-              <div key={bloco.numero} className="mb-4">
-                <h3 className="mb-1 text-sm font-semibold text-terciaria">Bloco {bloco.numero}</h3>
-                {bloco.movimentos
-                  ?.filter((m) => m.ativo)
-                  .map((mov) => {
-                    const s = statusPorMovimento.get(mov.id);
-                    const st = s?.status ?? "em_andamento";
-                    return (
-                      <div
-                        key={mov.id}
-                        className="flex items-center justify-between gap-3 border-b border-terciaria/10 py-1.5 text-sm"
-                      >
-                        <div className="flex items-center gap-2">
-                          {mov.categoria && (
-                            <span className="rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
-                              {mov.categoria}
-                            </span>
-                          )}
-                          <span className="text-black">{mov.nome}</span>
-                        </div>
-                        <span
-                          className={
-                            st === "aprovado"
-                              ? "text-xs text-primaria"
-                              : st === "pendente_avaliacao"
-                                ? "text-xs text-secundaria"
-                                : "text-xs text-terciaria/60"
-                          }
+              <details key={bloco.numero} className="mb-2 rounded-lg border border-terciaria/10 p-3">
+                <summary className="cursor-pointer text-sm font-semibold text-terciaria">
+                  Bloco {bloco.numero}
+                </summary>
+                <div className="mt-2">
+                  {bloco.movimentos
+                    ?.filter((m) => m.ativo)
+                    .map((mov) => {
+                      const s = statusPorMovimento.get(mov.id);
+                      const st = s?.status ?? "em_andamento";
+                      return (
+                        <div
+                          key={mov.id}
+                          className="flex items-center justify-between gap-3 border-b border-terciaria/10 py-1.5 text-sm"
                         >
-                          {ROTULO_STATUS[st]}
-                        </span>
-                      </div>
-                    );
-                  })}
-              </div>
+                          <div className="flex items-center gap-2">
+                            {mov.categoria && (
+                              <span className="rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
+                                {mov.categoria}
+                              </span>
+                            )}
+                            <span className="text-black">{mov.nome}</span>
+                          </div>
+                          <span
+                            className={
+                              st === "aprovado"
+                                ? "text-xs text-primaria"
+                                : st === "pendente_avaliacao"
+                                  ? "text-xs text-secundaria"
+                                  : "text-xs text-terciaria/60"
+                            }
+                          >
+                            {ROTULO_STATUS[st]}
+                          </span>
+                        </div>
+                      );
+                    })}
+                </div>
+              </details>
             ))}
         </section>
-      ))}
+      )}
     </div>
   );
 }

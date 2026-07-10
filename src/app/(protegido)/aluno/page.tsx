@@ -4,7 +4,11 @@ import { MovimentoRow } from "./MovimentoRow";
 
 type StatusMovimento = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
-export default async function AlunoPage() {
+export default async function AlunoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ nivel?: string }>;
+}) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
@@ -45,6 +49,10 @@ export default async function AlunoPage() {
     blocos_completos: number;
   } | null;
 
+  const { nivel: nivelParam } = await searchParams;
+  const nivelSelecionado = Number(nivelParam) || niveis?.[0]?.numero || 1;
+  const nivelAtual = (niveis ?? []).find((n) => n.numero === nivelSelecionado);
+
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -54,39 +62,53 @@ export default async function AlunoPage() {
         <Estatistica rotulo="Blocos completos" valor={r?.blocos_completos ?? 0} />
       </section>
 
-      {(niveis ?? []).map((nivel) => (
-        <section key={nivel.numero}>
-          <h2 className="mb-3 text-lg font-semibold text-black">
-            Nível {nivel.numero}
-            {nivel.nome ? ` — ${nivel.nome}` : ""}
-          </h2>
-          {nivel.blocos
+      <nav className="flex flex-wrap gap-2">
+        {(niveis ?? []).map((n) => (
+          <a
+            key={n.numero}
+            href={`/aluno?nivel=${n.numero}`}
+            className={
+              n.numero === nivelSelecionado
+                ? "rounded-full bg-primaria px-3 py-1.5 text-sm font-medium text-primaria-texto"
+                : "rounded-full px-3 py-1.5 text-sm font-medium text-terciaria hover:bg-terciaria/10"
+            }
+          >
+            Nível {n.numero}
+          </a>
+        ))}
+      </nav>
+
+      {nivelAtual && (
+        <section>
+          {nivelAtual.blocos
             ?.sort((a, b) => a.numero - b.numero)
             .map((bloco) => (
-              <div key={bloco.numero} className="mb-4">
-                <h3 className="mb-1 text-sm font-semibold text-terciaria">
+              <details key={bloco.numero} className="mb-2 rounded-lg border border-terciaria/10 p-3">
+                <summary className="cursor-pointer text-sm font-semibold text-terciaria">
                   Bloco {bloco.numero}
-                </h3>
-                {bloco.movimentos
-                  ?.filter((m) => m.ativo)
-                  .map((mov) => {
-                    const s = statusPorMovimento.get(mov.id);
-                    return (
-                      <MovimentoRow
-                        key={mov.id}
-                        movimentoId={mov.id}
-                        nome={mov.nome}
-                        categoria={mov.categoria}
-                        status={(s?.status as StatusMovimento) ?? "em_andamento"}
-                        sucessosConsecutivos={s?.sucessos_consecutivos ?? 0}
-                        sucessosNecessarios={necessarios}
-                      />
-                    );
-                  })}
-              </div>
+                </summary>
+                <div className="mt-2">
+                  {bloco.movimentos
+                    ?.filter((m) => m.ativo)
+                    .map((mov) => {
+                      const s = statusPorMovimento.get(mov.id);
+                      return (
+                        <MovimentoRow
+                          key={mov.id}
+                          movimentoId={mov.id}
+                          nome={mov.nome}
+                          categoria={mov.categoria}
+                          status={(s?.status as StatusMovimento) ?? "em_andamento"}
+                          sucessosConsecutivos={s?.sucessos_consecutivos ?? 0}
+                          sucessosNecessarios={necessarios}
+                        />
+                      );
+                    })}
+                </div>
+              </details>
             ))}
         </section>
-      ))}
+      )}
     </div>
   );
 }
