@@ -39,12 +39,12 @@ export function PasskeyLoginButton({ proximo }: { proximo: string }) {
   if (!suportado) return null;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full max-w-sm flex-col gap-2">
       <button
         type="button"
         onClick={entrar}
         disabled={pending}
-        className="flex items-center justify-center gap-2 rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-full border border-terciaria/30 px-4 py-2 font-medium text-terciaria disabled:opacity-50"
       >
         <FingerprintIcon />
         Entrar com biometria
