@@ -1,0 +1,31 @@
+name: Keep Supabase awake
+
+# O plano free do Supabase pausa projetos sem nenhuma requisição de API por
+# 7 dias seguidos. Este workflow faz um GET leve no health-check do Supabase
+# Auth a cada 3 dias (margem de segurança) só pra manter o projeto de
+# produção (lufichapole) ativo, sem precisar do plano Pro.
+#
+# Não toca em nenhuma tabela/dado — é um endpoint de health-check padrão do
+# GoTrue, sem custo de linha de banco.
+
+on:
+  schedule:
+    - cron: "0 12 */3 * *" # a cada 3 dias, 12h UTC
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health-check do Supabase (produção)
+        env:
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_PROD_ANON_KEY }}
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            https://ttzxktdmqqthfpahdfjw.supabase.co/auth/v1/health)
+          echo "HTTP status: $status"
+          if [ "$status" != "200" ]; then
+            echo "Health-check falhou (status $status) — projeto pode estar pausado ou fora do ar."
+            exit 1
+          fi
