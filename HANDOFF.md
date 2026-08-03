@@ -1,5 +1,47 @@
 # HANDOFF
 
+## 2026-08-03 — Incidente: app fora do ar (Supabase pausado) + keep-alive
+
+### O que aconteceu
+- Usuário reportou erro 504 acessando https://lufichapole.vercel.app.
+- Diagnóstico: build/deploy do Vercel estavam OK (último deploy há 23 dias,
+  status `Ready`). O erro era o **projeto Supabase de produção pausado**
+  (`status: INACTIVE`) pelo plano free (auto-pause após 7 dias sem requisição
+  de API) — DNS do hostname do projeto não resolvia (`getaddrinfo ENOTFOUND`),
+  o middleware do Next.js estourava timeout de 25s tentando falar com o Auth,
+  resultando em 504 na Vercel.
+- **Resolvido**: projeto restaurado via Management API do Supabase
+  (`POST /v1/projects/{ref}/restore`) — a CLI (`supabase projects`) não tem
+  subcomando de restore, só `list`/`create`/`delete`/`api-keys`. Levou uns
+  minutos pra sair de `INACTIVE` → `COMING_UP` → `RESTORING` → `ACTIVE_HEALTHY`
+  (com alguns erros intermitentes — 521, socket errors — durante a janela de
+  restauração, que se resolveram sozinhos).
+- **Prevenção implementada**: `.github/workflows/keepalive.yml` — ping a cada
+  3 dias em `/auth/v1/health` do Supabase, evita o projeto pausar de novo sem
+  precisar do plano Pro. Testado manualmente via `workflow_dispatch`, passou
+  (`HTTP status: 200`). Ver decisão completa em `vault/_index.md`.
+
+### Incidente de segurança desta sessão (ação pendente)
+- Um **Supabase Personal Access Token** (`sbp_...`) foi colado em texto plano
+  no chat pelo usuário, a pedido do assistente, pra rodar `supabase login`
+  (ambiente sem TTY não permite o fluxo OAuth interativo). Foi usado só pra
+  autenticar a CLI localmente, nunca commitado. **Ação pendente: revogar esse
+  token no dashboard** (https://supabase.com/dashboard/account/tokens) e, se
+  precisar de novo da CLI, gerar um novo e preferencialmente rodar
+  `supabase login` direto no terminal do usuário (fluxo interativo com
+  browser), sem colar o valor no chat.
+
+### Observação sobre gh (GitHub CLI)
+- A máquina tem duas contas logadas no `gh` (`twfelipegraca` e `fgraca2010`).
+  O repositório do projeto é do `fgraca2010` — precisou `gh auth switch
+  --user fgraca2010` antes de conseguir gerenciar secrets/workflows dele.
+
+### Próximo passo imediato
+1. Revogar o Supabase Personal Access Token exposto no chat.
+2. Confirmar em ~3-6 dias que o workflow `keepalive.yml` disparou
+   automaticamente pelo cron (não só manualmente) e que o Supabase continua
+   `ACTIVE_HEALTHY`.
+
 ## 2026-07-10 — Revisão completa: features pendentes + mobile
 
 ### O que foi feito nesta sessão

@@ -28,6 +28,26 @@
   Nunca colar valores de secrets em chat/PR/issue — preencher direto no arquivo
   ou no dashboard do provedor.
 
+### Keep-alive do Supabase (2026-08-03)
+
+- **Problema**: o projeto Supabase de produção (`lufichapole`) está no plano
+  free, que **pausa automaticamente projetos sem nenhuma requisição de API por
+  7 dias**. Como o app tem tráfego baixo, isso já causou queda real em
+  produção (erro 504, DNS do projeto Supabase não resolvia — `getaddrinfo
+  ENOTFOUND`) — diagnosticado em 2026-08-03, resolvido restaurando o projeto
+  via Management API (`POST /v1/projects/{ref}/restore`, já que a CLI do
+  Supabase não tem subcomando de restore).
+- **Solução**: workflow agendado `.github/workflows/keepalive.yml`, roda a
+  cada 3 dias (margem de segurança) + `workflow_dispatch` manual. Faz um `GET
+  /auth/v1/health` (health-check padrão do GoTrue, sem custo de linha de
+  banco) usando a anon key de produção, guardada no secret do repo
+  `SUPABASE_PROD_ANON_KEY` (a anon key já é pública por design — fica embutida
+  no HTML/JS do site — então não é um segredo novo sendo introduzido).
+  Se a chamada falhar, o workflow falha e o GitHub manda e-mail de alerta
+  automaticamente, servindo também de alarme antecipado de queda.
+- Alternativa descartada por ora: upgrade pro plano Pro do Supabase ($25/mês)
+  — remove o auto-pause, mas o usuário optou por continuar no free tier.
+
 ## Autenticação
 
 - Métodos: e-mail/senha, Google OAuth (Microsoft removido em 2026-07-10).
