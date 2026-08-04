@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MovimentoRow } from "@/app/(protegido)/MovimentoRow";
+import { listarSucessosMovimento } from "@/app/(protegido)/actions";
 
 vi.mock("@/app/(protegido)/professor/actions", () => ({
   registrarTentativaProfessor: vi.fn(async () => ({ erro: null })),
@@ -169,5 +170,52 @@ describe("MovimentoRow", () => {
     await user.click(screen.getByTitle("Ver as datas dos sucessos desta sequência"));
 
     expect(await screen.findByText(/✓ /)).toBeInTheDocument();
+  });
+
+  it("regressão: se a contagem mudar (ex.: professor reprova/aprova) enquanto o painel está aberto, refaz a busca em vez de manter datas antigas em cache", async () => {
+    const mockado = vi.mocked(listarSucessosMovimento);
+    // A resposta depende do "limite" (= sucessosConsecutivos no momento da
+    // chamada) — evita depender de quantas vezes o efeito dispara (pode
+    // rodar mais de uma vez por render em alguns ambientes) e testa o que
+    // realmente importa: que o valor buscado reflete a prop atual.
+    mockado.mockImplementation(async (_movimentoId, limite) =>
+      limite > 0
+        ? { erro: null, datas: ["2026-08-01T10:00:00Z", "2026-08-02T10:00:00Z"].slice(0, limite) }
+        : { erro: null, datas: [] }
+    );
+
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="em_andamento"
+        sucessosConsecutivos={2}
+        sucessosNecessarios={4}
+      />
+    );
+
+    await user.click(screen.getByTitle("Ver as datas dos sucessos desta sequência"));
+    expect(await screen.findAllByText(/✓ /)).toHaveLength(2);
+
+    // Simula o professor reprovando: o servidor zera a contagem e este
+    // componente recebe a nova prop via re-render, sem o painel ter sido
+    // fechado/reaberto e sem reload de página.
+    rerender(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="em_andamento"
+        sucessosConsecutivos={0}
+        sucessosNecessarios={4}
+      />
+    );
+
+    await waitFor(() => {
+      expect(screen.queryAllByText(/✓ /)).toHaveLength(0);
+      expect(screen.getByText(/Nenhum sucesso registrado/)).toBeInTheDocument();
+    });
   });
 });

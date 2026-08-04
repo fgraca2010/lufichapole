@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   registrarTentativaProfessor,
   reiniciarMovimentoProfessor,
@@ -59,17 +59,24 @@ export function MovimentoRow({
 
   const alunoId = controlesProfessor?.alunoId;
 
-  function alternarExpandido() {
-    const abrindo = !expandido;
-    setExpandido(abrindo);
-    if (abrindo && datasSucesso === null) {
+  // Refaz a busca sempre que o painel está aberto E a contagem/status muda —
+  // não só no clique. Isso corrige o cache ficar "preso" com datas antigas
+  // depois de aprovar/reprovar/marcar sucesso ou erro sem precisar recarregar
+  // a página: assim que o servidor confirma a mudança (revalidatePath) e este
+  // componente recebe as novas props, o efeito dispara de novo.
+  useEffect(() => {
+    if (!expandido || status === "aprovado") return;
+    startCarregamentoDatas(async () => {
       setErroDatas(null);
-      startCarregamentoDatas(async () => {
-        const r = await listarSucessosMovimento(movimentoId, sucessosConsecutivos, alunoId);
-        if (r.erro) setErroDatas(r.erro);
-        else setDatasSucesso(r.datas);
-      });
-    }
+      const r = await listarSucessosMovimento(movimentoId, sucessosConsecutivos, alunoId);
+      if (r.erro) setErroDatas(r.erro);
+      else setDatasSucesso(r.datas);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandido, sucessosConsecutivos, status]);
+
+  function alternarExpandido() {
+    setExpandido((v) => !v);
   }
 
   function registrar(resultado: "sucesso" | "erro") {
