@@ -4,11 +4,12 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { COOKIE_MFA_VERIFICADO } from "@/lib/auth-2fa";
 
 export async function sair() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  (await cookies()).delete("lu_mfa_verificado");
+  (await cookies()).delete(COOKIE_MFA_VERIFICADO);
   redirect("/login");
 }
 
@@ -58,7 +59,7 @@ export async function excluirConta(userIdAlvo: string) {
 
   if (excluindoAPropria) {
     await supabase.auth.signOut();
-    (await cookies()).delete("lu_mfa_verificado");
+    (await cookies()).delete(COOKIE_MFA_VERIFICADO);
     redirect("/login");
   }
 

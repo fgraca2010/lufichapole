@@ -3,8 +3,7 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { mensagemErro } from "@/lib/erro";
-
-const COOKIE_MFA_VERIFICADO = "lu_mfa_verificado";
+import { COOKIE_MFA_VERIFICADO, mfaCookieOptions } from "@/lib/auth-2fa";
 
 export async function enviarCodigoEmail() {
   const supabase = await createClient();
@@ -36,12 +35,7 @@ export async function confirmarCodigoEmail(codigo: string) {
   if (error) return { erro: "Código inválido ou expirado. Tente de novo." };
 
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_MFA_VERIFICADO, "1", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-  });
+  cookieStore.set(COOKIE_MFA_VERIFICADO, "1", mfaCookieOptions);
 
   return { erro: null };
 }

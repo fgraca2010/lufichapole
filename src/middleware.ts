@@ -1,9 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { loginUsouMetodoForte } from "@/lib/auth-2fa";
+import { loginUsouMetodoForte, COOKIE_MFA_VERIFICADO, mfaCookieOptions } from "@/lib/auth-2fa";
 
 const ROTAS_PROTEGIDAS = ["/aluno", "/professor", "/admin", "/perfil"];
-const COOKIE_MFA_VERIFICADO = "lu_mfa_verificado";
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -60,12 +59,7 @@ export async function middleware(request: NextRequest) {
       const loginPorMetodoForte = loginUsouMetodoForte(aal?.currentAuthenticationMethods);
 
       if (loginPorMetodoForte) {
-        supabaseResponse.cookies.set(COOKIE_MFA_VERIFICADO, "1", {
-          httpOnly: true,
-          secure: true,
-          sameSite: "lax",
-          path: "/",
-        });
+        supabaseResponse.cookies.set(COOKIE_MFA_VERIFICADO, "1", mfaCookieOptions);
       } else {
         // Isenção restrita a contas de QA/teste (nunca setada via UI — ver
         // supabase/migrations/0004_mfa_isento.sql). Consulta leve, só quando
