@@ -3,6 +3,22 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
+/** Lista os alunos vinculados ao professor logado — usado no modal de troca rápida de aluno na ficha. */
+export async function listarAlunosVinculados() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { erro: "Não autenticado", alunos: [] };
+
+  const { data, error } = await supabase
+    .from("perfis")
+    .select("id, nome_completo, avatar_url")
+    .eq("professor_id", user.id)
+    .order("nome_completo");
+
+  if (error) return { erro: error.message, alunos: [] };
+  return { erro: null, alunos: data ?? [] };
+}
+
 /**
  * Registra uma tentativa (sucesso/erro) do aluno vinculado — a partir de
  * 2026-08-04 é o professor quem marca, não mais o próprio aluno (mudança de

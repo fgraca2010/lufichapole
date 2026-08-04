@@ -159,6 +159,19 @@ muda** — só quem aciona:
   como atalho de pendências — não conflita com a marcação feita direto na
   ficha individual do aluno, ambas chamam `avaliar_movimento()`.
 
+**Melhorias de UX na mesma linha (2026-08-04, sem migration nova — só leem
+tabelas/RLS já existentes):**
+- Badge amarelo (`em_andamento`/`pendente_avaliacao`) é clicável: expande e
+  mostra as datas dos sucessos que compõem a sequência **atual** (os últimos
+  N `tentativas_movimento` com `resultado='sucesso'`, N = sucessos
+  consecutivos — como todo `erro` zera a sequência, isso sempre corresponde
+  exatamente à sequência em andamento).
+- Badge verde (`aprovado`) mostra a data (`aprovado_em`) logo abaixo do texto.
+- Ficha do aluno (visão do professor): clicar no nome abre um modal pra trocar
+  rapidamente para outro aluno vinculado, sem voltar pra lista
+  (`TrocarAlunoModal`, lista via `listarAlunosVinculados()`). Só existe nessa
+  rota, que já é professor-only por redirect — não precisa de guarda extra.
+
 ## Painel gamificado do Aluno (2026-07-09)
 
 Tela do Aluno mostra um resumo numérico: total de **treinos** (dias em que

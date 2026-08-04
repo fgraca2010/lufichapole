@@ -42,7 +42,7 @@ export default async function AlunoPage({
         .order("numero"),
       supabase
         .from("aluno_movimento_status")
-        .select("movimento_id, status, sucessos_consecutivos")
+        .select("movimento_id, status, sucessos_consecutivos, aprovado_em")
         .eq("aluno_id", user.id),
     ]);
 
@@ -131,6 +131,7 @@ export default async function AlunoPage({
                           status={(s?.status as StatusMovimento) ?? "em_andamento"}
                           sucessosConsecutivos={s?.sucessos_consecutivos ?? 0}
                           sucessosNecessarios={necessarios}
+                          aprovadoEm={s?.aprovado_em ?? null}
                         />
                       );
                     })}

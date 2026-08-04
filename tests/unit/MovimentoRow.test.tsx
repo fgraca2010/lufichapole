@@ -9,6 +9,10 @@ vi.mock("@/app/(protegido)/professor/actions", () => ({
   avaliarMovimento: vi.fn(async () => ({ erro: null })),
 }));
 
+vi.mock("@/app/(protegido)/actions", () => ({
+  listarSucessosMovimento: vi.fn(async () => ({ erro: null, datas: ["2026-08-01T10:00:00Z"] })),
+}));
+
 describe("MovimentoRow", () => {
   it("mostra o nome e a categoria do movimento", () => {
     render(
@@ -129,5 +133,41 @@ describe("MovimentoRow", () => {
       />
     );
     expect(screen.queryByText("Recomeçar")).not.toBeInTheDocument();
+  });
+
+  it("aprovado com aprovadoEm: mostra a data logo abaixo do texto Aprovado", () => {
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="aprovado"
+        sucessosConsecutivos={4}
+        sucessosNecessarios={4}
+        aprovadoEm="2026-08-01T10:00:00Z"
+      />
+    );
+    expect(screen.getByText("Aprovado")).toBeInTheDocument();
+    expect(screen.getByText(/^em /)).toBeInTheDocument();
+  });
+
+  it("clicar no badge amarelo expande e mostra as datas dos sucessos da sequência atual", async () => {
+    const user = userEvent.setup();
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="em_andamento"
+        sucessosConsecutivos={2}
+        sucessosNecessarios={4}
+      />
+    );
+
+    expect(screen.queryByText(/✓ /)).not.toBeInTheDocument();
+
+    await user.click(screen.getByTitle("Ver as datas dos sucessos desta sequência"));
+
+    expect(await screen.findByText(/✓ /)).toBeInTheDocument();
   });
 });

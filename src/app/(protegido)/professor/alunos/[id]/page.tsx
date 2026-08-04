@@ -1,6 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MovimentoRow } from "../../../MovimentoRow";
+import { TrocarAlunoModal } from "./TrocarAlunoModal";
 
 type StatusMovimento = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
@@ -41,7 +42,7 @@ export default async function FichaAlunoPage({
         .order("numero"),
       supabase
         .from("aluno_movimento_status")
-        .select("movimento_id, status, sucessos_consecutivos")
+        .select("movimento_id, status, sucessos_consecutivos, aprovado_em")
         .eq("aluno_id", id),
     ]);
 
@@ -60,8 +61,8 @@ export default async function FichaAlunoPage({
 
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
-      <h1 className="text-xl font-semibold text-black">{aluno.nome_completo}</h1>
-      <p className="text-xs text-terciaria">
+      <TrocarAlunoModal alunoAtualId={id} alunoAtualNome={aluno.nome_completo} />
+      <p className="-mt-6 text-xs text-terciaria">
         Marque aqui o que a aluna já executou na aula (✓/✗) e confirme a
         aprovação quando bater a sequência necessária.
       </p>
@@ -113,6 +114,7 @@ export default async function FichaAlunoPage({
                           status={(s?.status as StatusMovimento) ?? "em_andamento"}
                           sucessosConsecutivos={s?.sucessos_consecutivos ?? 0}
                           sucessosNecessarios={necessarios}
+                          aprovadoEm={s?.aprovado_em ?? null}
                           controlesProfessor={{ alunoId: id }}
                         />
                       );

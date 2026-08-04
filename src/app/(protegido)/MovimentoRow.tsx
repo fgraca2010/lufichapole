@@ -6,6 +6,7 @@ import {
   reiniciarMovimentoProfessor,
   avaliarMovimento,
 } from "./professor/actions";
+import { listarSucessosMovimento } from "./actions";
 
 type Status = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
@@ -16,6 +17,8 @@ type Props = {
   status: Status;
   sucessosConsecutivos: number;
   sucessosNecessarios: number;
+  /** Data (ISO) em que o movimento foi aprovado — mostrada abaixo de "Aprovado". */
+  aprovadoEm?: string | null;
   /**
    * Presente só na ficha que o PROFESSOR abre de um aluno vinculado — habilita
    * marcar sucesso/erro, aprovar/reprovar e reiniciar. Ausente = visão
@@ -24,6 +27,10 @@ type Props = {
    */
   controlesProfessor?: { alunoId: string };
 };
+
+function formatarDataHora(iso: string) {
+  return new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
 
 const rotuloStatus: Record<Status, string> = {
   em_andamento: "Em andamento",
@@ -38,13 +45,32 @@ export function MovimentoRow({
   status,
   sucessosConsecutivos,
   sucessosNecessarios,
+  aprovadoEm,
   controlesProfessor,
 }: Props) {
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState<string | null>(null);
   const [confirmandoReinicio, setConfirmandoReinicio] = useState(false);
 
+  const [expandido, setExpandido] = useState(false);
+  const [carregandoDatas, startCarregamentoDatas] = useTransition();
+  const [datasSucesso, setDatasSucesso] = useState<string[] | null>(null);
+  const [erroDatas, setErroDatas] = useState<string | null>(null);
+
   const alunoId = controlesProfessor?.alunoId;
+
+  function alternarExpandido() {
+    const abrindo = !expandido;
+    setExpandido(abrindo);
+    if (abrindo && datasSucesso === null) {
+      setErroDatas(null);
+      startCarregamentoDatas(async () => {
+        const r = await listarSucessosMovimento(movimentoId, sucessosConsecutivos, alunoId);
+        if (r.erro) setErroDatas(r.erro);
+        else setDatasSucesso(r.datas);
+      });
+    }
+  }
 
   function registrar(resultado: "sucesso" | "erro") {
     if (!alunoId) return;
@@ -94,18 +120,27 @@ export function MovimentoRow({
 
       <div className="flex flex-wrap items-center gap-2 text-xs">
         {/* O "box" do movimento: amarelo enquanto não aprovado (em_andamento
-            ou pendente_avaliacao), verde quando aprovado. */}
-        <span
-          className={
-            "rounded-full px-2 py-0.5 font-medium " +
-            (status === "aprovado"
-              ? "bg-primaria text-primaria-texto"
-              : "bg-atencao text-atencao-texto")
-          }
-        >
-          {rotuloStatus[status]}
-          {status !== "aprovado" && ` (${sucessosConsecutivos}/${sucessosNecessarios})`}
-        </span>
+            ou pendente_avaliacao) — clicável, expande as datas dos sucessos
+            da sequência atual. Verde quando aprovado, com a data embaixo. */}
+        <div className="flex flex-col items-start gap-0.5">
+          {status === "aprovado" ? (
+            <span className="rounded-full bg-primaria px-2 py-0.5 font-medium text-primaria-texto">
+              {rotuloStatus[status]}
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={alternarExpandido}
+              className="rounded-full bg-atencao px-2 py-0.5 font-medium text-atencao-texto hover:brightness-95"
+              title="Ver as datas dos sucessos desta sequência"
+            >
+              {rotuloStatus[status]} ({sucessosConsecutivos}/{sucessosNecessarios})
+            </button>
+          )}
+          {status === "aprovado" && aprovadoEm && (
+            <span className="text-[11px] text-terciaria/60">em {formatarDataHora(aprovadoEm)}</span>
+          )}
+        </div>
 
         {podeMarcar && (
           <>
@@ -179,6 +214,27 @@ export function MovimentoRow({
               Cancelar
             </button>
           </div>
+        </div>
+      )}
+
+      {expandido && status !== "aprovado" && (
+        <div className="w-full rounded-md bg-atencao/10 p-2 text-xs">
+          {carregandoDatas && datasSucesso === null && (
+            <p className="text-terciaria">Carregando…</p>
+          )}
+          {erroDatas && <p className="text-secundaria">{erroDatas}</p>}
+          {datasSucesso?.length === 0 && (
+            <p className="text-terciaria">Nenhum sucesso registrado ainda nesta sequência.</p>
+          )}
+          {datasSucesso && datasSucesso.length > 0 && (
+            <ul className="flex flex-col gap-0.5">
+              {datasSucesso.map((data, i) => (
+                <li key={i} className="text-terciaria">
+                  ✓ {formatarDataHora(data)}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
