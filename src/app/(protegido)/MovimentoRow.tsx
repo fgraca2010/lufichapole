@@ -1,20 +1,33 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { registrarTentativa, reiniciarMovimento } from "./actions";
+import {
+  registrarTentativaProfessor,
+  reiniciarMovimentoProfessor,
+  avaliarMovimento,
+} from "./professor/actions";
+
+type Status = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
 type Props = {
   movimentoId: number;
   nome: string;
   categoria: string | null;
-  status: "em_andamento" | "pendente_avaliacao" | "aprovado";
+  status: Status;
   sucessosConsecutivos: number;
   sucessosNecessarios: number;
+  /**
+   * Presente só na ficha que o PROFESSOR abre de um aluno vinculado — habilita
+   * marcar sucesso/erro, aprovar/reprovar e reiniciar. Ausente = visão
+   * somente leitura (o aluno, a partir de 2026-08-04, só acompanha o que o
+   * professor já marcou — ver vault/_index.md).
+   */
+  controlesProfessor?: { alunoId: string };
 };
 
-const rotuloStatus: Record<Props["status"], string> = {
+const rotuloStatus: Record<Status, string> = {
   em_andamento: "Em andamento",
-  pendente_avaliacao: "Aguardando avaliação do professor",
+  pendente_avaliacao: "Aguardando avaliação",
   aprovado: "Aprovado",
 };
 
@@ -25,29 +38,48 @@ export function MovimentoRow({
   status,
   sucessosConsecutivos,
   sucessosNecessarios,
+  controlesProfessor,
 }: Props) {
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState<string | null>(null);
   const [confirmandoReinicio, setConfirmandoReinicio] = useState(false);
 
+  const alunoId = controlesProfessor?.alunoId;
+
   function registrar(resultado: "sucesso" | "erro") {
+    if (!alunoId) return;
     setErro(null);
     startTransition(async () => {
-      const r = await registrarTentativa(movimentoId, resultado);
+      const r = await registrarTentativaProfessor(alunoId, movimentoId, resultado);
+      if (r.erro) setErro(r.erro);
+    });
+  }
+
+  function avaliar(confirmado: boolean) {
+    if (!alunoId) return;
+    setErro(null);
+    startTransition(async () => {
+      const r = await avaliarMovimento(alunoId, movimentoId, confirmado);
       if (r.erro) setErro(r.erro);
     });
   }
 
   function reiniciar() {
+    if (!alunoId) return;
     setErro(null);
     startTransition(async () => {
-      const r = await reiniciarMovimento(movimentoId);
+      const r = await reiniciarMovimentoProfessor(alunoId, movimentoId);
       if (r.erro) setErro(r.erro);
       else setConfirmandoReinicio(false);
     });
   }
 
-  const podeRegistrar = status !== "aprovado";
+  // Mesmo com avaliação pendente, o professor pode continuar marcando
+  // sucesso/erro (um erro nesse meio tempo derruba de volta a em_andamento —
+  // ver registrar_tentativa_movimento() no banco).
+  const podeMarcar = Boolean(alunoId) && status !== "aprovado";
+  const podeAvaliar = Boolean(alunoId) && status === "pendente_avaliacao";
+  const podeReiniciar = Boolean(alunoId) && status === "aprovado";
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-terciaria/10 py-2">
@@ -61,20 +93,21 @@ export function MovimentoRow({
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs">
+        {/* O "box" do movimento: amarelo enquanto não aprovado (em_andamento
+            ou pendente_avaliacao), verde quando aprovado. */}
         <span
           className={
-            status === "aprovado"
-              ? "text-primaria"
-              : status === "pendente_avaliacao"
-                ? "text-secundaria"
-                : "text-terciaria/60"
+            "rounded-full px-2 py-0.5 font-medium " +
+            (status === "aprovado"
+              ? "bg-primaria text-primaria-texto"
+              : "bg-atencao text-atencao-texto")
           }
         >
           {rotuloStatus[status]}
           {status !== "aprovado" && ` (${sucessosConsecutivos}/${sucessosNecessarios})`}
         </span>
 
-        {podeRegistrar && (
+        {podeMarcar && (
           <>
             <button
               disabled={pending}
@@ -95,7 +128,26 @@ export function MovimentoRow({
           </>
         )}
 
-        {status === "aprovado" && !confirmandoReinicio && (
+        {podeAvaliar && (
+          <>
+            <button
+              disabled={pending}
+              onClick={() => avaliar(true)}
+              className="rounded-full bg-primaria px-3 py-1.5 font-medium text-primaria-texto disabled:opacity-50"
+            >
+              Confirmar
+            </button>
+            <button
+              disabled={pending}
+              onClick={() => avaliar(false)}
+              className="rounded-full bg-secundaria px-3 py-1.5 font-medium text-secundaria-texto disabled:opacity-50"
+            >
+              Treinar de novo
+            </button>
+          </>
+        )}
+
+        {podeReiniciar && !confirmandoReinicio && (
           <button
             onClick={() => setConfirmandoReinicio(true)}
             className="text-terciaria/50 underline"
@@ -106,10 +158,10 @@ export function MovimentoRow({
         )}
       </div>
 
-      {status === "aprovado" && confirmandoReinicio && (
+      {podeReiniciar && confirmandoReinicio && (
         <div className="w-full rounded-md bg-secundaria/10 p-2 text-xs">
           <p className="text-black">
-            Se continuar, você <strong>perde a aprovação</strong> neste
+            Se continuar, o aluno <strong>perde a aprovação</strong> neste
             movimento e precisa treinar do zero de novo. Tem certeza?
           </p>
           <div className="mt-1 flex gap-2">

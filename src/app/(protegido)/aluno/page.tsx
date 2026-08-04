@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { MovimentoRow } from "./MovimentoRow";
+import { MovimentoRow } from "../MovimentoRow";
 import { Avatar } from "../Avatar";
 
 type StatusMovimento = "em_andamento" | "pendente_avaliacao" | "aprovado";
@@ -70,6 +70,10 @@ export default async function AlunoPage({
           {professor?.nome_completo ?? "ainda não vinculado"}
           <Avatar avatarUrl={professor?.avatar_url} nome={professor?.nome_completo ?? "professor"} />
         </span>
+      </p>
+      <p className="-mt-6 text-xs text-terciaria">
+        Seu professor(a) marca aqui o que você já executa nas aulas — essa
+        tela é só pra você acompanhar sua evolução.
       </p>
 
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">

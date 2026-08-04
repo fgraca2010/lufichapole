@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MovimentoRow } from "@/app/(protegido)/aluno/MovimentoRow";
+import { MovimentoRow } from "@/app/(protegido)/MovimentoRow";
 
-vi.mock("@/app/(protegido)/aluno/actions", () => ({
-  registrarTentativa: vi.fn(async () => ({ erro: null })),
-  reiniciarMovimento: vi.fn(async () => ({ erro: null })),
+vi.mock("@/app/(protegido)/professor/actions", () => ({
+  registrarTentativaProfessor: vi.fn(async () => ({ erro: null })),
+  reiniciarMovimentoProfessor: vi.fn(async () => ({ erro: null })),
+  avaliarMovimento: vi.fn(async () => ({ erro: null })),
 }));
 
 describe("MovimentoRow", () => {
@@ -26,7 +27,7 @@ describe("MovimentoRow", () => {
     expect(screen.getByText(/2\/4/)).toBeInTheDocument();
   });
 
-  it("mostra botões de sucesso/erro quando não está aprovado", () => {
+  it("sem controlesProfessor (visão do aluno): não mostra nenhum botão de ação, mesmo sem estar aprovado", () => {
     render(
       <MovimentoRow
         movimentoId={1}
@@ -37,12 +38,48 @@ describe("MovimentoRow", () => {
         sucessosNecessarios={4}
       />
     );
-    expect(screen.getByTitle("Registrar sucesso")).toBeInTheDocument();
-    expect(screen.getByTitle("Registrar erro")).toBeInTheDocument();
-    expect(screen.getByText(/Aguardando avaliação do professor/)).toBeInTheDocument();
+    expect(screen.queryByTitle("Registrar sucesso")).not.toBeInTheDocument();
+    expect(screen.queryByTitle("Registrar erro")).not.toBeInTheDocument();
+    expect(screen.queryByText("Confirmar")).not.toBeInTheDocument();
+    expect(screen.queryByText("Recomeçar")).not.toBeInTheDocument();
+    expect(screen.getByText(/Aguardando avaliação/)).toBeInTheDocument();
   });
 
-  it("esconde os botões quando o movimento já está aprovado", () => {
+  it("com controlesProfessor: mostra botões de sucesso/erro quando não está aprovado", () => {
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="em_andamento"
+        sucessosConsecutivos={2}
+        sucessosNecessarios={4}
+        controlesProfessor={{ alunoId: "aluno-1" }}
+      />
+    );
+    expect(screen.getByTitle("Registrar sucesso")).toBeInTheDocument();
+    expect(screen.getByTitle("Registrar erro")).toBeInTheDocument();
+  });
+
+  it("com controlesProfessor e pendente_avaliacao: mostra sucesso/erro E confirmar/treinar de novo", () => {
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="pendente_avaliacao"
+        sucessosConsecutivos={4}
+        sucessosNecessarios={4}
+        controlesProfessor={{ alunoId: "aluno-1" }}
+      />
+    );
+    expect(screen.getByTitle("Registrar sucesso")).toBeInTheDocument();
+    expect(screen.getByTitle("Registrar erro")).toBeInTheDocument();
+    expect(screen.getByText("Confirmar")).toBeInTheDocument();
+    expect(screen.getByText("Treinar de novo")).toBeInTheDocument();
+  });
+
+  it("esconde os botões de marcar quando o movimento já está aprovado (com ou sem controlesProfessor)", () => {
     render(
       <MovimentoRow
         movimentoId={1}
@@ -51,6 +88,7 @@ describe("MovimentoRow", () => {
         status="aprovado"
         sucessosConsecutivos={4}
         sucessosNecessarios={4}
+        controlesProfessor={{ alunoId: "aluno-1" }}
       />
     );
     expect(screen.queryByTitle("Registrar sucesso")).not.toBeInTheDocument();
@@ -58,7 +96,7 @@ describe("MovimentoRow", () => {
     expect(screen.getByText("Aprovado")).toBeInTheDocument();
   });
 
-  it("mostra aviso de perda de aprovação antes de confirmar o reinício", async () => {
+  it("com controlesProfessor: mostra aviso de perda de aprovação antes de confirmar o reinício", async () => {
     const user = userEvent.setup();
     render(
       <MovimentoRow
@@ -68,6 +106,7 @@ describe("MovimentoRow", () => {
         status="aprovado"
         sucessosConsecutivos={4}
         sucessosNecessarios={4}
+        controlesProfessor={{ alunoId: "aluno-1" }}
       />
     );
 
@@ -76,5 +115,19 @@ describe("MovimentoRow", () => {
     expect(screen.getByText(/perde a aprovação/)).toBeInTheDocument();
     expect(screen.getByText("Sim, recomeçar")).toBeInTheDocument();
     expect(screen.getByText("Cancelar")).toBeInTheDocument();
+  });
+
+  it("sem controlesProfessor: não mostra o botão de Recomeçar mesmo aprovado", () => {
+    render(
+      <MovimentoRow
+        movimentoId={1}
+        nome="Body Position"
+        categoria="A"
+        status="aprovado"
+        sucessosConsecutivos={4}
+        sucessosNecessarios={4}
+      />
+    );
+    expect(screen.queryByText("Recomeçar")).not.toBeInTheDocument();
   });
 });

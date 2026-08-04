@@ -1,11 +1,8 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { MovimentoRow } from "../../../MovimentoRow";
 
-const ROTULO_STATUS: Record<string, string> = {
-  em_andamento: "Em andamento",
-  pendente_avaliacao: "Aguardando avaliação",
-  aprovado: "Aprovado",
-};
+type StatusMovimento = "em_andamento" | "pendente_avaliacao" | "aprovado";
 
 export default async function FichaAlunoPage({
   params,
@@ -34,18 +31,21 @@ export default async function FichaAlunoPage({
 
   if (!aluno || aluno.professor_id !== user.id) notFound();
 
-  const [{ data: resumo }, { data: niveis }, { data: status }] = await Promise.all([
-    supabase.rpc("resumo_aluno", { p_aluno_id: id }).single(),
-    supabase
-      .from("niveis")
-      .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo, ordem))")
-      .order("numero"),
-    supabase
-      .from("aluno_movimento_status")
-      .select("movimento_id, status, sucessos_consecutivos")
-      .eq("aluno_id", id),
-  ]);
+  const [{ data: resumo }, { data: config }, { data: niveis }, { data: status }] =
+    await Promise.all([
+      supabase.rpc("resumo_aluno", { p_aluno_id: id }).single(),
+      supabase.from("configuracao_sistema").select("sucessos_necessarios").single(),
+      supabase
+        .from("niveis")
+        .select("numero, nome, blocos(numero, movimentos(id, nome, categoria, ativo, ordem))")
+        .order("numero"),
+      supabase
+        .from("aluno_movimento_status")
+        .select("movimento_id, status, sucessos_consecutivos")
+        .eq("aluno_id", id),
+    ]);
 
+  const necessarios = config?.sucessos_necessarios ?? 4;
   const statusPorMovimento = new Map((status ?? []).map((s) => [s.movimento_id, s]));
   const r = resumo as {
     treinos: number;
@@ -61,7 +61,10 @@ export default async function FichaAlunoPage({
   return (
     <div className="flex flex-1 flex-col gap-8 px-6 py-8">
       <h1 className="text-xl font-semibold text-black">{aluno.nome_completo}</h1>
-      <p className="text-xs text-terciaria">Visualização somente leitura — só o aluno edita a própria ficha.</p>
+      <p className="text-xs text-terciaria">
+        Marque aqui o que a aluna já executou na aula (✓/✗) e confirme a
+        aprovação quando bater a sequência necessária.
+      </p>
 
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Estatistica rotulo="Treinos" valor={r?.treinos ?? 0} />
@@ -101,32 +104,17 @@ export default async function FichaAlunoPage({
                     .sort((a, b) => a.ordem - b.ordem)
                     .map((mov) => {
                       const s = statusPorMovimento.get(mov.id);
-                      const st = s?.status ?? "em_andamento";
                       return (
-                        <div
+                        <MovimentoRow
                           key={mov.id}
-                          className="flex items-center justify-between gap-3 border-b border-terciaria/10 py-1.5 text-sm"
-                        >
-                          <div className="flex items-center gap-2">
-                            {mov.categoria && (
-                              <span className="rounded-full bg-terciaria/10 px-2 py-0.5 text-xs font-medium text-terciaria">
-                                {mov.categoria}
-                              </span>
-                            )}
-                            <span className="text-black">{mov.nome}</span>
-                          </div>
-                          <span
-                            className={
-                              st === "aprovado"
-                                ? "text-xs text-primaria"
-                                : st === "pendente_avaliacao"
-                                  ? "text-xs text-secundaria"
-                                  : "text-xs text-terciaria/60"
-                            }
-                          >
-                            {ROTULO_STATUS[st]}
-                          </span>
-                        </div>
+                          movimentoId={mov.id}
+                          nome={mov.nome}
+                          categoria={mov.categoria}
+                          status={(s?.status as StatusMovimento) ?? "em_andamento"}
+                          sucessosConsecutivos={s?.sucessos_consecutivos ?? 0}
+                          sucessosNecessarios={necessarios}
+                          controlesProfessor={{ alunoId: id }}
+                        />
                       );
                     })}
                 </div>

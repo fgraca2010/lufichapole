@@ -1,12 +1,20 @@
--- Testa reiniciar_movimento_aprovado(): reset voluntário de aprovação.
+-- Testa reiniciar_movimento_professor(): a partir de 2026-08-04, quem reinicia
+-- voluntariamente um movimento aprovado é o PROFESSOR vinculado (antes era o
+-- próprio aluno — reiniciar_movimento_aprovado ficou deprecated, execute
+-- revogado, ver migration 0013).
 begin;
 select plan(5);
 
 insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-000000000033', 'professor-reinicio@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professor Reinício')),
+  ('00000000-0000-0000-0000-000000000034', 'professor-outro-reinicio@teste.local',
+    jsonb_build_object('persona', 'professor', 'nome_completo', 'Professor Outro Reinício'));
+
+insert into auth.users (id, email, raw_user_meta_data) values
   ('00000000-0000-0000-0000-000000000031', 'aluno-reinicio@teste.local',
-    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Aluna Reinício')),
-  ('00000000-0000-0000-0000-000000000032', 'outro-aluno-reinicio@teste.local',
-    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Outra Aluna'));
+    jsonb_build_object('persona', 'aluno', 'nome_completo', 'Aluna Reinício',
+      'professor_id', '00000000-0000-0000-0000-000000000033'));
 
 select id as movimento_1 into temp t_mov from movimentos order by id limit 1;
 grant select on t_mov to authenticated;
@@ -15,14 +23,16 @@ grant select on t_mov to authenticated;
 insert into aluno_movimento_status (aluno_id, movimento_id, status, sucessos_consecutivos, aprovado_em)
   select '00000000-0000-0000-0000-000000000031', movimento_1, 'aprovado', 4, now() from t_mov;
 
--- 1) Não é o dono: não reinicia nada (não afeta a linha de outro aluno).
+-- 1) Professor NÃO vinculado não consegue reiniciar.
 set local role authenticated;
-set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000032","role":"authenticated"}';
+set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000034","role":"authenticated"}';
 
 select throws_ok(
-  $$ select reiniciar_movimento_aprovado((select movimento_1 from t_mov)) $$,
-  'Este movimento não está aprovado — não há o que reiniciar.',
-  'outro aluno não consegue reiniciar movimento que não é dele'
+  $$ select reiniciar_movimento_professor(
+       '00000000-0000-0000-0000-000000000031', (select movimento_1 from t_mov)
+     ) $$,
+  'Apenas o professor vinculado a este aluno pode reiniciar este movimento.',
+  'professor NÃO vinculado não consegue reiniciar movimento do aluno'
 );
 
 reset role;
@@ -30,16 +40,18 @@ reset "request.jwt.claims";
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov where s.aluno_id = '00000000-0000-0000-0000-000000000031' and s.movimento_id = t_mov.movimento_1),
-  'aprovado', 'e a linha do dono continua aprovada (não foi afetada)'
+  'aprovado', 'e a linha continua aprovada (não foi afetada)'
 );
 
--- 2) O dono reinicia com sucesso.
+-- 2) Professor vinculado reinicia com sucesso.
 set local role authenticated;
-set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000031","role":"authenticated"}';
+set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000033","role":"authenticated"}';
 
 select lives_ok(
-  $$ select reiniciar_movimento_aprovado((select movimento_1 from t_mov)) $$,
-  'dono consegue reiniciar o próprio movimento aprovado'
+  $$ select reiniciar_movimento_professor(
+       '00000000-0000-0000-0000-000000000031', (select movimento_1 from t_mov)
+     ) $$,
+  'professor vinculado consegue reiniciar o movimento aprovado do aluno'
 );
 
 reset role;

@@ -69,14 +69,18 @@
 ## Personas
 
 ### 1. Aluno
-- Vê suas fichas online e registra suas evoluções (por nível/movimento).
-- Pode baixar a ficha com o estado atual de preenchimento.
-- Vê seu próprio histórico de alterações ao longo do tempo (funciona como
-  histórico de aulas/atividades).
-- É o **único** que pode editar sua própria ficha.
+- **Somente leitura desde 2026-08-04** (ver mudança de regra abaixo) — vê sua
+  ficha, seu histórico de tentativas e baixa a ficha em PDF, mas não marca
+  mais nada. Quem registra as tentativas agora é o professor vinculado.
+- Vê seu próprio histórico ao longo do tempo (funciona como histórico de
+  aulas/atividades) — inclusive quem marcou cada tentativa (ele mesmo, em
+  registros antigos anteriores a 2026-08-04, ou o professor, dali em diante).
 
 ### 2. Professor
-- Vê as fichas dos alunos vinculados a ele (somente leitura — não edita).
+- Vê as fichas dos alunos vinculados a ele. **Desde 2026-08-04, não é mais
+  somente leitura**: registra as tentativas (sucesso/erro) do aluno durante a
+  aula e aprova/reprova quando bate a sequência necessária — tudo na própria
+  tela da ficha do aluno.
 - Dados protegidos por LGPD aparecem **mascarados** para ele.
 - Dashboard simples: total de alunos, total por nível, total por tipo de
   movimento, histórico dos alunos vinculados, aniversariantes do mês.
@@ -122,6 +126,38 @@
   contagem de sucessos consecutivos >= à nova quantidade volta a ficar
   **pendente de avaliação** (não aprovado direto — ainda passa pelo
   professor).
+
+### Mudança de regra: professor passa a registrar as tentativas (2026-08-04)
+
+A pedido do owner da aplicação, quem marca "sucesso"/"erro" de um movimento
+deixou de ser o aluno e passou a ser o **professor vinculado**, direto na
+tela da ficha do aluno (antes somente leitura). O resto da regra acima **não
+muda** — só quem aciona:
+
+- **Aluno vira 100% somente leitura**: só acompanha (ficha, histórico, PDF).
+  Não registra mais tentativas nem reinicia movimentos aprovados.
+- Continua existindo **sucesso/erro** (não virou um "marcar como feito"
+  simples) — erro ainda zera a sequência, inclusive durante uma avaliação
+  pendente.
+- **Continua em 2 passos**: bater a quantidade necessária só põe
+  `pendente_avaliacao` (mostrado em **amarelo**, cor nova adicionada à
+  paleta — `--color-atencao` em `globals.css`, já que a paleta de marca não
+  tinha amarelo); a aprovação em si continua sendo uma ação separada do
+  professor (evita que a própria marcação final já aprove sem intenção
+  explícita). Quando aprovado, o indicador vira **verde** (`--color-primaria`).
+- "Recomeçar movimento aprovado" (ação voluntária, reset pra treinar de novo)
+  também passou a ser do professor — `reiniciar_movimento_professor(aluno_id,
+  movimento_id)`, com checagem de vínculo igual a `avaliar_movimento()`. A
+  função antiga (`reiniciar_movimento_aprovado`, que operava sobre o próprio
+  `auth.uid()`) fica deprecated no histórico de migrations (`0013_...sql`),
+  execute revogado.
+- Nova coluna `tentativas_movimento.registrado_por` (auditoria: quem clicou)
+  — tentativas antigas foram *backfilled* com `registrado_por = aluno_id`
+  (era mesmo o aluno quem registrava antes dessa data); o histórico do aluno
+  mostra "marcado por você" ou pelo nome do professor.
+- A fila de avaliação cross-alunos (`/professor/avaliacoes`) foi **mantida**
+  como atalho de pendências — não conflita com a marcação feita direto na
+  ficha individual do aluno, ambas chamam `avaliar_movimento()`.
 
 ## Painel gamificado do Aluno (2026-07-09)
 

@@ -38,10 +38,10 @@ grant select on t_mov2 to authenticated;
 -- ------------------------------------------------------------------------
 -- 1) Sucessos abaixo do necessário: fica em_andamento
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -55,8 +55,8 @@ select is(
 -- ------------------------------------------------------------------------
 -- 2) Erro zera a sequência
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select sucessos_consecutivos from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -66,12 +66,12 @@ select is(
 -- ------------------------------------------------------------------------
 -- 3) Bate a sequência necessária -> pendente_avaliacao (não aprova direto)
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -81,8 +81,8 @@ select is(
 -- ------------------------------------------------------------------------
 -- 4) Aluno continua registrando mesmo com avaliação pendente
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select sucessos_consecutivos from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -96,8 +96,8 @@ select is(
 -- ------------------------------------------------------------------------
 -- 5) Erro durante avaliação pendente: zera e volta a em_andamento
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -111,12 +111,12 @@ select is(
 -- ------------------------------------------------------------------------
 -- 6) Bate a sequência de novo, pra testar avaliar_movimento()
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -168,12 +168,12 @@ select is(
 -- ------------------------------------------------------------------------
 -- 9) Bate a sequência de novo e professor CONFIRMA -> aprovado (definitivo)
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 set local role authenticated;
 set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000002","role":"authenticated"}';
@@ -198,8 +198,8 @@ select isnt(
 -- ------------------------------------------------------------------------
 -- 10) Sticky: aprovado nunca reverte, mesmo com erro novo
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro' from t_mov1;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_1, 'erro', '00000000-0000-0000-0000-000000000002' from t_mov1;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov1 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov1.movimento_1),
@@ -224,10 +224,10 @@ reset "request.jwt.claims";
 -- ------------------------------------------------------------------------
 -- 12) Diminuir a quantidade necessária manda pendentes elegíveis pra avaliação
 -- ------------------------------------------------------------------------
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_2, 'sucesso' from t_mov2;
-insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-  select '00000000-0000-0000-0000-000000000001', movimento_2, 'sucesso' from t_mov2;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_2, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov2;
+insert into tentativas_movimento (aluno_id, movimento_id, resultado, registrado_por)
+  select '00000000-0000-0000-0000-000000000001', movimento_2, 'sucesso', '00000000-0000-0000-0000-000000000002' from t_mov2;
 
 select is(
   (select status::text from aluno_movimento_status s, t_mov2 where s.aluno_id = '00000000-0000-0000-0000-000000000001' and s.movimento_id = t_mov2.movimento_2),

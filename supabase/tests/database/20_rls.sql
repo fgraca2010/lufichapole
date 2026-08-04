@@ -1,6 +1,6 @@
 -- Testes de RLS: cada persona só vê/edita o que a regra de negócio permite.
 begin;
-select plan(11);
+select plan(12);
 
 -- ------------------------------------------------------------------------
 -- Fixtures (como postgres, bypassa RLS)
@@ -100,22 +100,42 @@ reset role;
 reset "request.jwt.claims";
 
 -- ------------------------------------------------------------------------
--- tentativas_movimento: aluno só insere pra si mesmo
+-- tentativas_movimento: a partir de 2026-08-04, só o professor VINCULADO
+-- registra — o aluno não insere mais nem a própria tentativa.
 -- ------------------------------------------------------------------------
 set local role authenticated;
 set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000011","role":"authenticated"}';
 
 select throws_like(
   $$ insert into tentativas_movimento (aluno_id, movimento_id, resultado)
-     select '00000000-0000-0000-0000-000000000012', movimento_1, 'sucesso' from t_mov $$,
+     select '00000000-0000-0000-0000-000000000011', movimento_1, 'sucesso' from t_mov $$,
   '%',
-  'aluno A não pode registrar tentativa em nome do aluno B'
+  'aluno A não pode mais registrar nem a própria tentativa'
 );
+
+reset role;
+reset "request.jwt.claims";
+
+set local role authenticated;
+set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000014","role":"authenticated"}';
+
+select throws_like(
+  $$ insert into tentativas_movimento (aluno_id, movimento_id, resultado)
+     select '00000000-0000-0000-0000-000000000011', movimento_1, 'sucesso' from t_mov $$,
+  '%',
+  'professor NÃO vinculado não pode registrar tentativa da aluna A'
+);
+
+reset role;
+reset "request.jwt.claims";
+
+set local role authenticated;
+set local "request.jwt.claims" to '{"sub":"00000000-0000-0000-0000-000000000013","role":"authenticated"}';
 
 select lives_ok(
   $$ insert into tentativas_movimento (aluno_id, movimento_id, resultado)
      select '00000000-0000-0000-0000-000000000011', movimento_1, 'sucesso' from t_mov $$,
-  'aluno A pode registrar a própria tentativa'
+  'professor vinculado pode registrar tentativa da aluna A'
 );
 
 reset role;

@@ -13,6 +13,11 @@
   --color-secundaria-texto: #ffffff;
   --color-terciaria: #383838;
   --color-terciaria-texto: #ffffff;
+  /* Cor semântica de status (não é cor de marca) — "ainda não aprovado,
+     mas em andamento/pendente" (ver vault/_index.md, mudança de 2026-08-04).
+     Texto escuro por cima pra manter contraste adequado sobre amarelo. */
+  --color-atencao: #e6a817;
+  --color-atencao-texto: #383838;
 }
 
 @theme inline {
@@ -24,6 +29,8 @@
   --color-secundaria-texto: var(--color-secundaria-texto);
   --color-terciaria: var(--color-terciaria);
   --color-terciaria-texto: var(--color-terciaria-texto);
+  --color-atencao: var(--color-atencao);
+  --color-atencao-texto: var(--color-atencao-texto);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

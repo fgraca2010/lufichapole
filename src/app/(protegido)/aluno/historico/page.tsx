@@ -27,7 +27,7 @@ export default async function HistoricoPage({
   const { data: tentativas, count } = await supabase
     .from("tentativas_movimento")
     .select(
-      "id, resultado, registrado_em, movimentos(nome, categoria, blocos(numero, niveis(numero)))",
+      "id, resultado, registrado_em, registrado_por, movimentos(nome, categoria, blocos(numero, niveis(numero))), professor:perfis!tentativas_movimento_registrado_por_fkey(nome_completo)",
       { count: "exact" }
     )
     .eq("aluno_id", user.id)
@@ -38,11 +38,13 @@ export default async function HistoricoPage({
     id: number;
     resultado: "sucesso" | "erro";
     registrado_em: string;
+    registrado_por: string;
     movimentos: {
       nome: string;
       categoria: string | null;
       blocos: { numero: number; niveis: { numero: number } | null } | null;
     } | null;
+    professor: { nome_completo: string } | null;
   };
 
   const linhas = (tentativas ?? []) as unknown as Linha[];
@@ -96,6 +98,10 @@ export default async function HistoricoPage({
               }
             >
               {t.resultado === "sucesso" ? "✓ Sucesso" : "✗ Errou"}
+            </span>
+            <span className="w-full shrink-0 text-xs text-terciaria/60 sm:w-auto">
+              marcado por{" "}
+              {t.registrado_por === user.id ? "você" : (t.professor?.nome_completo ?? "professor(a)")}
             </span>
           </div>
         ))}
