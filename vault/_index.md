@@ -37,14 +37,16 @@
   ENOTFOUND`) — diagnosticado em 2026-08-03, resolvido restaurando o projeto
   via Management API (`POST /v1/projects/{ref}/restore`, já que a CLI do
   Supabase não tem subcomando de restore).
-- **Solução**: workflow agendado `.github/workflows/keepalive.yml`, roda a
-  cada 3 dias (margem de segurança) + `workflow_dispatch` manual. Faz um `GET
-  /auth/v1/health` (health-check padrão do GoTrue, sem custo de linha de
-  banco) usando a anon key de produção, guardada no secret do repo
-  `SUPABASE_PROD_ANON_KEY` (a anon key já é pública por design — fica embutida
-  no HTML/JS do site — então não é um segredo novo sendo introduzido).
-  Se a chamada falhar, o workflow falha e o GitHub manda e-mail de alerta
-  automaticamente, servindo também de alarme antecipado de queda.
+- **Solução (corrigida em 2026-09-19)**: workflow agendado
+  `.github/workflows/keepalive.yml`, roda a cada 3 dias + `workflow_dispatch`.
+  **Importante**: a primeira versão usava `GET /auth/v1/health`, que **não
+  conta como "atividade"** pro critério de auto-pause do Supabase — detectava
+  a queda mas não evitava (falhou em 13/16/19-09-2026, projeto pausou de novo).
+  A versão corrigida faz uma **consulta real na API de dados (PostgREST)** —
+  `configuracao_sistema?select=id&limit=1` com `service_role` (secret
+  `SUPABASE_SERVICE_ROLE_KEY`), que de fato bate no banco e conta como
+  atividade. Se falhar, o workflow falha (alerta por e-mail do GitHub + bot do
+  Telegram).
 - Alternativa descartada por ora: upgrade pro plano Pro do Supabase ($25/mês)
   — remove o auto-pause, mas o usuário optou por continuar no free tier.
 

@@ -1,5 +1,37 @@
 # HANDOFF
 
+## 2026-09-19 — Supabase pausou de novo + correção do keep-alive
+
+### O que aconteceu
+- O projeto Supabase de produção (`lufichapole`) caiu de novo (`INACTIVE`),
+  apesar do keep-alive estar rodando a cada 3 dias.
+- Diagnóstico: o keep-alive **rodou** (cron OK), mas as últimas 3 execuções
+  (13, 16 e 19/09) **falharam** com `exit code 6` — o `/auth/v1/health` que o
+  script usava **não conta como "atividade"** pro critério de auto-pause do
+  Supabase ("low activity in a 7-day period"). Ele detectava a queda, mas não
+  evitava a pausa.
+- **Correção**: o keep-alive agora faz uma **consulta real na API de dados
+  (PostgREST)** — `configuracao_sistema?select=id&limit=1` com `service_role` —
+  que de fato bate no banco e conta como atividade. Novo secret
+  `SUPABASE_SERVICE_ROLE_KEY` no repo. Testado via `workflow_dispatch`,
+  passou (`HTTP status: 200`).
+- Projeto restaurado de novo via Management API (`POST /v1/projects/{ref}/restore`),
+  voltou a `ACTIVE_HEALTHY`.
+
+### Observação
+- A conta ativa do `gh` volta pra `twfelipegraca` entre sessões — sempre
+  checar `gh auth status` e rodar `gh auth switch --user fgraca2010` antes de
+  mexer em secrets/workflows do repo `fgraca2010/lufichapole`.
+
+### Próximo passo imediato
+1. Confirmar em ~3-6 dias que o keep-alive (agora com consulta real) mantém o
+   Supabase `ACTIVE_HEALTHY` sem pausar.
+2. Ainda pendente: revogar o Supabase PAT exposto no chat (2026-08-03) e o
+   Telegram bot token exposto no chat (2026-08-03).
+3. Decisão de backup ainda em aberto: usuário escolheu manter o repo público e
+   criar um repo privado só pra backups (`fgraca2010/lufichapole-backups`) —
+   não implementado ainda.
+
 ## 2026-08-03 — Incidente: app fora do ar (Supabase pausado) + keep-alive
 
 ### O que aconteceu
