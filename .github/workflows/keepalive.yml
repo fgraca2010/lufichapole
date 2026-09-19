@@ -1,12 +1,16 @@
 name: Keep Supabase awake
 
-# O plano free do Supabase pausa projetos sem nenhuma requisição de API por
-# 7 dias seguidos. Este workflow faz um GET leve no health-check do Supabase
-# Auth a cada 3 dias (margem de segurança) só pra manter o projeto de
-# produção (lufichapole) ativo, sem precisar do plano Pro.
+# O plano free do Supabase pausa projetos com "low activity in a 7-day
+# period". O health-check do Auth (/auth/v1/health) NÃO conta como atividade
+# — ele só detecta que o projeto já caiu, não evita a pausa (foi exatamente o
+# que aconteceu em 13/16/19-09-2026: o workflow rodou, o health-check falhou
+# com exit 6 porque o projeto já estava pausado).
 #
-# Não toca em nenhuma tabela/dado — é um endpoint de health-check padrão do
-# GoTrue, sem custo de linha de banco.
+# A correção: fazer uma consulta REAL na API de dados (PostgREST), que de fato
+# bate no banco e conta como atividade. Usamos o service_role (não a anon key)
+# porque a tabela configuracao_sistema tem RLS que exige autenticação — e o
+# service_role é a chave de servidor, guardada como secret, nunca exposta no
+# cliente. A consulta é leve (1 linha, 1 coluna) e não escreve nada.
 
 on:
   schedule:
@@ -17,15 +21,31 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping health-check do Supabase (produção)
+      - name: Consulta real na API de dados (conta como atividade)
+        id: ping
         env:
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_PROD_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 \
-            -H "apikey: $SUPABASE_ANON_KEY" \
-            https://ttzxktdmqqthfpahdfjw.supabase.co/auth/v1/health)
+          status=$(curl -s -o /tmp/keepalive.json -w "%{http_code}" --max-time 15 \
+            -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+            "https://ttzxktdmqqthfpahdfjw.supabase.co/rest/v1/configuracao_sistema?select=id&limit=1")
           echo "HTTP status: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
           if [ "$status" != "200" ]; then
-            echo "Health-check falhou (status $status) — projeto pode estar pausado ou fora do ar."
+            echo "Consulta falhou (status $status) — projeto pode estar pausado ou fora do ar."
             exit 1
           fi
+
+      - name: Alertar no Telegram
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATUS: ${{ steps.ping.outputs.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          texto="🔴 lufichapole: consulta ao Supabase falhou (status ${STATUS}). Projeto pode estar pausado ou fora do ar. ${RUN_URL}"
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${texto}"
